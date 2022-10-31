@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ProyectoFinalV2</string>
+    <string name="postpone">
+        Posponer
+    </string>
+    <string name="complete">Completar</string>
+</resources>
