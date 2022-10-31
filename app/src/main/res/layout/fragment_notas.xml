@@ -97,6 +97,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
+        <Switch
+            android:id="@+id/isTaskSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="48dp"
+            android:text="¿Es una tarea?" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -125,6 +133,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
