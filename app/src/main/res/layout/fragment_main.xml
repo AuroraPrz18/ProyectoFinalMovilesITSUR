@@ -58,7 +58,7 @@
                 android:layout_margin="8dp"
                 android:orientation="horizontal">
                 <com.google.android.material.button.MaterialButton
-                    android:id="@+id/complete"
+                    android:id="@+id/crear"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
@@ -106,6 +106,5 @@
         app:maxImageSize="50dp"
         android:backgroundTint="@color/white"
         app:layout_anchor="@id/bottomAppBar"/>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

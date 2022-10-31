@@ -1,12 +1,13 @@
 package com.example.proyectofinalv2.ui.main
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
-import android.support.v4.app.Fragment
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.proyectofinalv2.R
+import com.google.android.material.datepicker.MaterialDatePicker
 
 class Notas : Fragment() {
 
@@ -14,21 +15,15 @@ class Notas : Fragment() {
         fun newInstance() = Notas()
     }
 
-    private lateinit var viewModel: NotasViewModel
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_notas, container, false)
+    private lateinit var viewModel: MainViewModel
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View {
+        return inflater.inflate(R.layout.fragment_main, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(
-            this,
-            ViewModelProvider.NewInstanceFactory()
-        ).get(NotasViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         // TODO: Use the ViewModel
     }
 

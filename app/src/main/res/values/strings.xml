@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">ProyectoFinalV2</string>
-    <string name="postpone">
-        Posponer
-    </string>
+    <string name="postpone">Posponer</string>
     <string name="complete">Completar</string>
+    <string name="noteTitle">Titulo de la nota</string>
+    <string name="noteDescription">Descripción</string>
+    <string name="datePicker">Seleccionar Fecha</string>
+    <string name="crear">Crear</string>
+    <string name="media">Subir archivo</string>
+    <string name="cancelar">Cancelar</string>
 </resources>
