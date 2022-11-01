@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ui.main.NoteDetails">
 
     <androidx.cardview.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:id="@+id/notify"
-        app:cardCornerRadius="20dp"
+        app:cardCornerRadius="16dp"
         android:animateLayoutChanges="true"
         app:cardElevation="4dp"
         app:cardUseCompatPadding="true">
@@ -23,52 +22,61 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="6dp">
+                android:orientation="horizontal">
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/linearLayout"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="2dp"
                     android:orientation="vertical"
+                    android:padding="4dp"
                     android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp">
+                    android:layout_marginRight="6dp">
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
                         android:layout_marginBottom="2dp"
                         android:id="@+id/nameTextView"
-                        android:text="Patear niños"
+                        android:text="Título de tarea"
                         android:textColor="@android:color/black"
-                        android:textSize="24sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
                         android:id="@+id/descriptionTextView"
-                        android:text="Patearles la cara a los niños groseros"
-                        android:textSize="18sp"/>
+                        android:text="Descripción de tarea"
+                        android:textSize="16sp"/>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:contentDescription="Media a incluir"
+                        android:scaleType="centerCrop"
+                        app:srcCompat="@android:drawable/sym_def_app_icon" />
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/date"
-                        android:text="Ma;ana"/>
+                        android:layout_margin="2dp"
+                        android:text="Fecha de entrega: 11 de sep 2022"/>
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/datecreated"
-                        android:text="Esta nota se creo el 30 de febrero del 2020"/>
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/media"
-                        android:text="Espacio para Media si existe"/>
+                        android:layout_margin="2dp"
+                        android:text="Fecha de creación: 30 de febrero del 2020"/>
+
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/autor"
+                        android:layout_margin="2dp"
                         android:text="By MarioGOD"/>
                 </LinearLayout>
             </RelativeLayout>
