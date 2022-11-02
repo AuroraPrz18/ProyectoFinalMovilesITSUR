@@ -4,13 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.main.Notifications"
+    tools:context=".ui.main.NotificationsFragment"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/notify"
         app:cardCornerRadius="20dp"
         android:animateLayoutChanges="true"
         app:cardElevation="4dp"
@@ -27,7 +26,6 @@
                 android:padding="6dp">
 
                 <ImageView
-                    android:id="@+id/notifyIcon"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_alignParentStart="true"
@@ -40,7 +38,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/linearLayout"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="2dp"
@@ -52,7 +49,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:id="@+id/nameTextView"
                         android:text="Tienes Tareas Pendientes"
                         android:textColor="@android:color/black"
                         android:textSize="24sp"
@@ -60,7 +56,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/descriptionTextView"
                         android:text="Hacer tarea de moviles"
                         android:textSize="18sp"/>
                 </LinearLayout>
@@ -76,7 +71,6 @@
     <androidx.cardview.widget.CardView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:id="@+id/notify"
         app:cardCornerRadius="20dp"
         android:animateLayoutChanges="true"
         app:cardElevation="4dp"
@@ -93,7 +87,6 @@
                 android:padding="6dp">
 
                 <ImageView
-                    android:id="@+id/notifyIcon"
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_alignParentStart="true"
@@ -106,7 +99,6 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/linearLayout"
                     android:layout_alignParentTop="true"
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="2dp"
@@ -118,7 +110,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="2dp"
-                        android:id="@+id/nameTextView"
                         android:text="Tienes Tareas Pendientes"
                         android:textColor="@android:color/black"
                         android:textSize="24sp"
@@ -126,7 +117,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/descriptionTextView"
                         android:text="Ver videos de gatitos"
                         android:textSize="18sp"/>
                 </LinearLayout>

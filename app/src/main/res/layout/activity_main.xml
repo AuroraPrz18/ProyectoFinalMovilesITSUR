@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragmentContainerView"
+        android:id="@+id/mainNavHost"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="409dp"
         android:layout_height="729dp"
@@ -15,33 +15,41 @@
         app:navGraph="@navigation/nav_graph"
         tools:layout_editor_absoluteX="1dp"
         tools:layout_editor_absoluteY="1dp" />
+
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/purple_500"
-        app:fabCradleMargin="10dp"
-        app:fabCradleRoundedCornerRadius="50dp">
+        android:background="@color/select_color"
+        android:padding="0dp"
+        app:backgroundTint="@color/menu_bar"
+        app:fabCradleMargin="5dp"
+        app:fabCradleRoundedCornerRadius="30dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomNavigationView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="15dp"
-            android:layout_marginRight="15dp"
             android:background="@android:color/transparent"
+            app:backgroundTint="@color/menu_bar"
+            app:itemIconTint="@color/second_color"
+            app:itemRippleColor="@color/material_dynamic_primary40"
+            app:itemTextColor="@color/second_color"
             app:labelVisibilityMode="labeled"
             app:menu="@menu/bottom_menu" />
+
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/addNoteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/second_color"
         android:contentDescription="@string/add_note"
         android:src="@drawable/ic_add"
+        android:tint="@color/background_fragments"
         app:layout_anchor="@id/bottomAppBar"
-        app:maxImageSize="50dp" />
+        app:maxImageSize="65dp"
+        app:rippleColor="@color/menu_bar" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -2,24 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/home"
+        android:id="@+id/mainFragment"
         android:title="Home"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_home"/>
     <item
-        android:id="@+id/note"
+        android:id="@+id/notesOnlyFragment"
         android:icon="@drawable/ic_baseline_note_24"
         android:iconTint="@color/white"
         android:title="Notes"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/task"
+        android:id="@+id/tasksOnlyFragment"
         android:icon="@drawable/ic_baseline_format_list_bulleted_24"
         android:iconTint="@color/white"
         android:title="Tasks"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/notify"
+        android:id="@+id/notificationsFragment"
         android:title="Notications"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_notifications_24"/>
