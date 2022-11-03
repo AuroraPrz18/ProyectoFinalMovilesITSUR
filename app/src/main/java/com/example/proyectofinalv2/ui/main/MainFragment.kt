@@ -30,10 +30,7 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.addNoteBtn.setOnClickListener{view: View ->
-            Navigation.findNavController(view).navigate(R.id.notas)
-            Toast.makeText(getActivity(), "Cambio", Toast.LENGTH_LONG).show()
-        }
+
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

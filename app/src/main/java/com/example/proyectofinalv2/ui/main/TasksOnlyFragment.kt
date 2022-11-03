@@ -8,24 +8,24 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.proyectofinalv2.R
 
-class Notifications : Fragment() {
+class TasksOnlyFragment : Fragment() {
 
     companion object {
-        fun newInstance() = Notifications()
+        fun newInstance() = TasksOnlyFragment()
     }
 
-    private lateinit var viewModel: NotificationsViewModel
+    private lateinit var viewModel: TasksOnlyViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_notifications, container, false)
+        return inflater.inflate(R.layout.fragment_tasks_only, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(NotificationsViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(TasksOnlyViewModel::class.java)
         // TODO: Use the ViewModel
     }
 
