@@ -1,5 +1,6 @@
 package com.example.proyectofinalv2.data.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.proyectofinalv2.domain.model.Note
 import kotlinx.coroutines.flow.Flow
@@ -7,19 +8,17 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM Note")
-    fun getNotes() : List<Note>
+    fun getNotes() : LiveData<List<Note>>
 
     @Query("SELECT * FROM Note WHERE id = :id")
-    fun getNoteById(id:Int) : Note?
-
-    //TODO: Queries to get only task or only notes
+    suspend fun getNoteById(id:Int) : Note?
 
     @Update
-    fun updateNote(note: Note)
+    suspend fun updateNote(note: Note)
 
     @Insert
-    fun insertNote(note: Note)
+    suspend fun insertNote(note: Note)
 
     @Delete
-    fun deleteNote(note: Note)
+    suspend fun deleteNote(note: Note)
 }

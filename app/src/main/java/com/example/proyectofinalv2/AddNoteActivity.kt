@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
@@ -19,7 +20,9 @@ import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddNoteBinding
-    private lateinit var addNoteViewModel: MainViewModel
+    private val addNoteViewModel: MainViewModel by  viewModels {
+        MainViewModelFactory((application as NoteApp).database!!.noteDao())
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +40,6 @@ class AddNoteActivity : AppCompatActivity() {
                 binding.dueDateWrapper.visibility = View.GONE
             }
         }
-        addNoteViewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
     private fun createNote() {
@@ -50,8 +52,6 @@ class AddNoteActivity : AppCompatActivity() {
             dateCreation = localDateToDate(LocalDate.now()), dueDate = localDateToDate(dueDate), isComplete = false, dateCompleted = null)
         // TODO: Add reminders and media
         addNoteViewModel.insertNewNote(newNote)
-        val newNote2 = addNoteViewModel.findNote(newNote)
-        Toast.makeText(this, newNote2?.title, Toast.LENGTH_LONG)
         finish()
     }
 
