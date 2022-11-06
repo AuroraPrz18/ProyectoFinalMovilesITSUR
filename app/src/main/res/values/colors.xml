@@ -6,6 +6,7 @@
     <color name="select_color">#C0B283</color>
     <color name="second_color">#DCD0C0</color>
     <color name="gray_text_color">#34495E</color>
+    <color name="text_field_color">#DCD0C0</color>
     <color name="search_tool_color">#FF018786</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

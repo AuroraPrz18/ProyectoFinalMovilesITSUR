@@ -57,7 +57,7 @@ class NotesListAdapter  (private val notesList: Array<Note>, val onClick: (Note)
         //holder.completeImageView.setImageResource(note.)
         holder.descriptionTextView.text = note.description
         holder.dateCreatedTextView.text = note.dateCreation.toString()
-        holder.dueDateTextView.text = note.dateSetter.toString()
+        //holder.dueDateTextView.text = note.dateSetter.toString()
         //holder.editButton.text = // TODO: Write onclick
         //holder.deleteButton.text = // TODO: Write onclick
     }

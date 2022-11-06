@@ -4,7 +4,8 @@
     <string name="complete">Completar</string>
     <string name="noteTitle">Titulo de la nota</string>
     <string name="noteDescription">Descripción</string>
-    <string name="datePicker">Seleccionar Fecha</string>
+    <string name="dueDatePicker">Fecha de vencimiento mm/dd/aaaa</string>
+    <string name="datePickerReminder">Fecha de recordatorio</string>
     <string name="crear">Crear</string>
     <string name="media">Subir archivo</string>
     <string name="cancelar">Cancelar</string>
@@ -24,4 +25,6 @@
     <string name="creation_date">Fecha de creación:</string>
     <string name="due_date">Fecha de entrega:</string>
     <string name="delete">Eliminar</string>
+    <string name="is_a_task">¿Es una tarea?</string>
+    <string name="title">Título:</string>
 </resources>

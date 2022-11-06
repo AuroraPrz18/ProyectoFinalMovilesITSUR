@@ -1,176 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="30dp"
-    tools:context=".AddNoteActivity">
+    android:orientation="vertical"
+    tools:context=".AddNoteActivity"
+    android:background="@color/background_fragments"
+    >
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/menu_bar"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <LinearLayout
+        android:orientation="vertical"
+        android:padding="8dp">
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Titulo:">
-
-            </TextView>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField"
+            android:hint="@string/noteTitle"
+            android:layout_marginTop="30dp"
+            android:padding="8dp"
+            app:boxBackgroundColor="@color/text_field_color"
+            app:startIconDrawable="@drawable/ic_baseline_title_24"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/titleEditView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/noteTitle"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_title_24">
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:textSize="@dimen/text_field"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/noteDescription"
+            android:padding="8dp"
+            app:boxBackgroundColor="@color/text_field_color"
+            app:startIconDrawable="@drawable/ic_baseline_subtitles_24"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/descriptionEditView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_field"
+                android:inputType="textMultiLine"
+                android:lines="8"
+                android:minLines="1"
+                android:gravity="top|start"
+                android:maxLines="20"
+                android:scrollbars="vertical"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!---
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/media"
+            android:padding="8dp"
+            app:boxBackgroundColor="@color/text_field_color"
+            app:startIconDrawable="@drawable/ic_baseline_perm_media_24"
+            android:textSize="@dimen/text_field"
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Descripción:">
-
-            </TextView>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/noteDescription"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_subtitles_24"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Media:">
-
-            </TextView>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/media"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_perm_media_24"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
+        </com.google.android.material.textfield.TextInputLayout>
+        -->
 
         <Switch
             android:id="@+id/isTaskSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="48dp"
-            android:text="¿Es una tarea?" />
+            android:text="@string/is_a_task"
+            android:textSize="@dimen/text_field"/>
 
-        <LinearLayout
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Fecha:">
-
-            </TextView>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField3"
+            android:hint="@string/dueDatePicker"
+            android:padding="8dp"
+            app:startIconDrawable="@drawable/ic_baseline_date_range_24"
+            app:boxBackgroundColor="@color/text_field_color"
+            >
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dueDate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/datePicker"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!---
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/datePickerReminder"
                 android:padding="8dp"
                 app:startIconDrawable="@drawable/ic_baseline_date_range_24"
+                app:boxBackgroundColor="@color/text_field_color"
                 >
-
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dateReminder"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="date"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/addReminderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Recordarme el:">
-
-            </TextView>
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textField7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/datePicker"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_date_range_24"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-        </LinearLayout>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/addReminderBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:text="Agregar otro recordatorio"
-            style="?attr/borderlessButtonStyle"
-            android:layout_marginRight="8dp" />
-
+                android:layout_marginEnd="8dp"
+                android:text="Agregar otro recordatorio"
+                style="?attr/borderlessButtonStyle"
+                android:layout_marginRight="8dp" />
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -178,20 +136,29 @@
             android:layout_marginTop="32dp">
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/crear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/crear"
                 style="?attr/borderlessButtonStyle"
-                android:layout_marginRight="8dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/crear"
+                android:textColor="@color/menu_bar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancelar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/cancelar"
                 style="?attr/borderlessButtonStyle"
-                android:layout_marginRight="8dp" />
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/cancelar"
+                android:textColor="#D85353"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </LinearLayout>
+
     </LinearLayout>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</LinearLayout>
