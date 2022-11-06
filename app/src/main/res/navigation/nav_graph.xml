@@ -26,11 +26,6 @@
         android:label="fragment_details"
         tools:layout="@layout/fragment_details" />
     <fragment
-        android:id="@+id/noteDetails"
-        android:name="com.example.proyectofinalv2.ui.main.NoteDetails"
-        android:label="fragment_note_details"
-        tools:layout="@layout/fragment_note_details" />
-    <fragment
         android:id="@+id/notesOnlyFragment"
         android:name="com.example.proyectofinalv2.ui.main.NotesOnlyFragment"
         android:label="fragment_notes_only"
