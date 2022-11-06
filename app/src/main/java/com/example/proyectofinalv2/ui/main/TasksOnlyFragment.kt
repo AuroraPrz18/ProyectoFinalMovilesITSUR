@@ -39,17 +39,7 @@ class TasksOnlyFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(TasksOnlyViewModel::class.java)
         val recyclerView = binding.allTasksOnlyRV
-        recyclerView?.layoutManager =
-            LinearLayoutManager(activity, LinearLayout.VERTICAL, false)
-        // TODO: Get list from model view
-        val Note1 = Note(title = "Nota1tasks", description = "Desc1", isTask = true, dateCreation = Date(12, 12, 2022), dueDate = Date(12, 12, 2022), isComplete = false, dateCompleted = null)
-        val Note2 = Note(title = "Nota2tasks", description = "Desc2", isTask = true, dateCreation = Date(11, 11, 2021), dueDate = Date(12, 12, 2022), isComplete = false, dateCompleted = null)
-        val notes : Array<Note> = arrayOf<Note>(Note1, Note2)
-        recyclerView?.adapter = NotesListAdapter(notes, {
-            Toast.makeText(activity
-                , "Escogio ${it.title}",
-                Toast.LENGTH_SHORT).show()
-        })
+
     }
 
 }

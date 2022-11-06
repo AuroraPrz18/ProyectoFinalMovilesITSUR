@@ -4,7 +4,7 @@ import com.example.proyectofinalv2.domain.model.Note
 import kotlinx.coroutines.flow.Flow
 
 interface NoteRepository {
-    fun getNotes(): Flow<List<Note>>
+    fun getNotes(): List<Note>
 
     suspend fun getNoteById(id: Int): Note?
 

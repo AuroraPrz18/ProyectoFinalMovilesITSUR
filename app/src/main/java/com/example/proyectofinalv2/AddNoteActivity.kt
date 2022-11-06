@@ -1,16 +1,25 @@
 package com.example.proyectofinalv2
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isGone
-import androidx.navigation.NavController
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
+import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
-import com.example.proyectofinalv2.databinding.ActivityMainBinding
+import com.example.proyectofinalv2.domain.model.Note
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityAddNoteBinding
+    private lateinit var addNoteViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,12 +37,25 @@ class AddNoteActivity : AppCompatActivity() {
                 binding.dueDateWrapper.visibility = View.GONE
             }
         }
+        addNoteViewModel = ViewModelProvider(this)[MainViewModel::class.java]
     }
 
     private fun createNote() {
         val title = binding.titleEditView.text.toString()
         val description = binding.descriptionEditView.text.toString()
         val isATask = binding.isTaskSwitch.isActivated
-        val dueDate = binding.titleEditView.text.toString()
+        val dueDateStr = binding.dueDate.text.toString()
+        val dueDate = LocalDate.parse(dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5))
+        val newNote = Note(title = title, description = description, isTask = isATask,
+            dateCreation = localDateToDate(LocalDate.now()), dueDate = localDateToDate(dueDate), isComplete = false, dateCompleted = null)
+        // TODO: Add reminders and media
+        addNoteViewModel.insertNewNote(newNote)
+        val newNote2 = addNoteViewModel.findNote(newNote)
+        Toast.makeText(this, newNote2?.title, Toast.LENGTH_LONG)
+        finish()
+    }
+
+    fun localDateToDate(localDate: LocalDate): Date? {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
     }
 }

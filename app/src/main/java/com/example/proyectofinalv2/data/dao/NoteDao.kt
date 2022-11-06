@@ -7,17 +7,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
     @Query("SELECT * FROM Note")
-    fun getNotes() : Flow<List<Note>>
+    fun getNotes() : List<Note>
 
-    @Query("SELECT * FROM Note WHERE uid = :id")
-    suspend fun getNoteById(id:Int) : Note?
+    @Query("SELECT * FROM Note WHERE id = :id")
+    fun getNoteById(id:Int) : Note?
+
+    //TODO: Queries to get only task or only notes
 
     @Update
-    suspend fun updateNote(note: Note)
+    fun updateNote(note: Note)
 
     @Insert
-    suspend fun insertNote(note: Note)
+    fun insertNote(note: Note)
 
     @Delete
-    suspend fun deleteNote(note: Note)
+    fun deleteNote(note: Note)
 }
