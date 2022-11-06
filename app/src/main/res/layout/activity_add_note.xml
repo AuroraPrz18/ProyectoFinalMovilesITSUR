@@ -34,7 +34,8 @@
                 android:id="@+id/titleEditView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="@dimen/text_field"/>
+                android:textSize="@dimen/text_field"
+                android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -87,6 +88,7 @@
 
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dueDateWrapper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/dueDatePicker"
