@@ -12,7 +12,7 @@ data class Note(
     @ColumnInfo(name = "description") val description: String?,
     @ColumnInfo(name = "isTask") val isTask: Boolean?,
     @ColumnInfo(name = "dateCreation") val dateCreation: Date?,
-    @ColumnInfo(name = "dateSetter") val dateSetter: Date?,
-    @ColumnInfo(name = "media") val media: String?,
-    @ColumnInfo(name = "author") val author: String?
+    @ColumnInfo(name = "dueDate") val dueDate: Date?,
+    @ColumnInfo(name = "isCompleted") val isComplete: Boolean?,
+    @ColumnInfo(name = "dateCompleted") val dateCompleted: Date?
 )
