@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.Flow
 
 class NoteRepositoryClass(private val  noteDao: NoteDao){
     fun allNotes() = noteDao.getNotes()
+    fun onlyTasks() = noteDao.getTasksOnly()
+    fun onlyNotes() = noteDao.getNotesOnly()
     suspend fun insertNote(note: Note) = noteDao.insertNote(note)
     suspend fun updateNote(note: Note) = noteDao.updateNote(note)
     suspend fun deleteNote(note: Note) = noteDao.insertNote(note)

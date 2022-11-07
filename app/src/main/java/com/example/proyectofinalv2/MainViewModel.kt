@@ -14,6 +14,8 @@ class MainViewModel(private val noteDao: NoteDao) : ViewModel() {
     val notesLiveData = MutableLiveData<List<Note>>()
 
     fun allNotes(): LiveData<List<Note>> = repository.allNotes()
+    fun onlyTasks(): LiveData<List<Note>> = repository.onlyTasks()
+    fun onlyNotes(): LiveData<List<Note>> = repository.onlyNotes()
 
     fun deleteNote(note: Note)= viewModelScope.launch(Dispatchers.IO){
         repository.deleteNote(note)

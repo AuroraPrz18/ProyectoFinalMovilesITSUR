@@ -41,7 +41,7 @@ class TasksOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
         }
 
 
-        viewModel.allNotes().observe(viewLifecycleOwner){
+        viewModel.onlyTasks().observe(viewLifecycleOwner){
                 list ->
             adapterV.setData(list as ArrayList<Note>)
             adapterV.notifyDataSetChanged()

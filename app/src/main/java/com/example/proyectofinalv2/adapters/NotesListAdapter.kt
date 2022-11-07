@@ -21,8 +21,10 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
         val descriptionTextView : TextView
         val mediaImageView: ImageView
         val dateCreatedTextView : TextView
+        val dueDateTextView1: TextView
         val dueDateTextView : TextView
         val editButton: Button
+        val postponeButton: Button
         val deleteButton: Button
         var currentNote: Note?= null
 
@@ -32,8 +34,10 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             descriptionTextView = view.findViewById(R.id.descriptionTextView)
             mediaImageView = view.findViewById(R.id.mediaImageView)
             dateCreatedTextView = view.findViewById(R.id.dateCreatedTextView)
+            dueDateTextView1 = view.findViewById(R.id.dueDateTextView1)
             dueDateTextView = view.findViewById(R.id.dueDateTextView)
             editButton = view.findViewById(R.id.editButton)
+            postponeButton = view.findViewById(R.id.postponeButton)
             deleteButton = view.findViewById(R.id.deleteButton)
         }
 
@@ -64,7 +68,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             //completeImageView.setImageResource(note.)
             descriptionTextView.text = note.description
             dateCreatedTextView.text = note.dateCreation.toString()
-            //dueDateTextView.text = note.dateSetter.toString()
+            dueDateTextView.text = note.dueDate.toString()
             //editButton.text = // TODO: Write onclick
             deleteButton.setOnClickListener {
                 onClickListeners.onDeleteClickListener(note)
@@ -73,8 +77,22 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
                 onClickListeners.onShowClickListener(note)
             }
         }
+        if(note.isTask == true){
+            if(note.isComplete == true){
+                holder.completeImageView.setImageResource(R.drawable.ic_baseline_check_circle_24)
+            }else{
+                holder.completeImageView.setImageResource(R.drawable.ic_baseline_check_circle_outline_24)
+            }
 
-
+            holder.dueDateTextView.visibility = View.VISIBLE
+            holder.postponeButton.visibility = View.VISIBLE
+            holder.dueDateTextView1.visibility = View.VISIBLE
+        }else{
+            holder.completeImageView.visibility = View.GONE
+            holder.dueDateTextView.visibility = View.GONE
+            holder.postponeButton.visibility = View.GONE
+            holder.dueDateTextView1.visibility = View.GONE
+        }
     }
 
     override fun getItemCount(): Int {

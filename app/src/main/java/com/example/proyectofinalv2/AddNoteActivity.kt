@@ -45,11 +45,17 @@ class AddNoteActivity : AppCompatActivity() {
     private fun createNote() {
         val title = binding.titleEditView.text.toString()
         val description = binding.descriptionEditView.text.toString()
-        val isATask = binding.isTaskSwitch.isActivated
-        val dueDateStr = binding.dueDate.text.toString()
-        val dueDate = LocalDate.parse(dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5))
+        val isATask = binding.isTaskSwitch.isChecked
+        var dueDate: Date?
+        if (isATask){
+            val dueDateStr = binding.dueDate.text.toString()
+            val dueDateStrAux = dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5)
+            val dueDateAux = LocalDate.parse(dueDateStrAux)
+            Toast.makeText(this,dueDateStrAux, Toast.LENGTH_LONG)
+            dueDate = localDateToDate(dueDateAux)!!
+        }else dueDate = null
         val newNote = Note(title = title, description = description, isTask = isATask,
-            dateCreation = localDateToDate(LocalDate.now()), dueDate = localDateToDate(dueDate), isComplete = false, dateCompleted = null)
+            dateCreation = localDateToDate(LocalDate.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
         // TODO: Add reminders and media
         addNoteViewModel.insertNewNote(newNote)
         finish()

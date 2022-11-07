@@ -10,6 +10,12 @@ interface NoteDao {
     @Query("SELECT * FROM Note")
     fun getNotes() : LiveData<List<Note>>
 
+    @Query("SELECT * FROM Note WHERE isTask= :isTask ORDER BY dueDate ASC")
+    fun getTasksOnly(isTask: Boolean = true) : LiveData<List<Note>>
+
+    @Query("SELECT * FROM Note WHERE isTask= :isTask ORDER BY dateCreation DESC")
+    fun getNotesOnly(isTask: Boolean = false) : LiveData<List<Note>>
+
     @Query("SELECT * FROM Note WHERE id = :id")
     suspend fun getNoteById(id:Int) : Note?
 
