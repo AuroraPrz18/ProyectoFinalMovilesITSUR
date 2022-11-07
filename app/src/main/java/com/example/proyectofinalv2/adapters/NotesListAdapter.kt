@@ -65,11 +65,12 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
         holder.apply {
             currentNote = note
             titleTextView.text = note.title
-            //completeImageView.setImageResource(note.)
             descriptionTextView.text = note.description
             dateCreatedTextView.text = note.dateCreation.toString()
             dueDateTextView.text = note.dueDate.toString()
-            //editButton.text = // TODO: Write onclick
+            editButton.setOnClickListener{
+                onClickListeners.onEditClickListener(note)
+            }
             postponeButton.setOnClickListener{
                 onClickListeners.onPostponeClickListener(note)
             }

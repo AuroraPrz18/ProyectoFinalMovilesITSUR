@@ -1,6 +1,7 @@
 package com.example.proyectofinalv2.ui.main
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.proyectofinalv2.AddNoteActivity
 import com.example.proyectofinalv2.MainViewModel
 import com.example.proyectofinalv2.R
 import com.example.proyectofinalv2.adapters.NotesListAdapter
@@ -61,7 +63,9 @@ class TasksOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
     }
 
     override fun onEditClickListener(note: Note) {
-        TODO("Not yet implemented")
+        val intent = Intent(activity, AddNoteActivity::class.java)
+        intent.putExtra("note", note)
+        startActivity(intent)
     }
 
     override fun onCompleteClickListener(note: Note) {

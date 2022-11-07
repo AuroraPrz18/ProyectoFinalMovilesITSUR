@@ -20,6 +20,7 @@ import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddNoteBinding
+    private var note: Note? = null;
     private val addNoteViewModel: MainViewModel by  viewModels {
         MainViewModelFactory((application as NoteApp).database!!.noteDao())
     }
@@ -40,6 +41,14 @@ class AddNoteActivity : AppCompatActivity() {
                 binding.dueDateWrapper.visibility = View.GONE
             }
         }
+
+        note = intent.getSerializableExtra("note") as Note?
+        if(note!=null){
+            binding.apply {
+                titleEditView.setText(note!!.title)
+                descriptionEditView.setText(note!!.description)
+            }
+        }
     }
 
     private fun createNote() {
@@ -54,10 +63,20 @@ class AddNoteActivity : AppCompatActivity() {
             Toast.makeText(this,dueDateStrAux, Toast.LENGTH_LONG)
             dueDate = localDateToDate(dueDateAux)!!
         }else dueDate = null
-        val newNote = Note(title = title, description = description, isTask = isATask,
-            dateCreation = localDateToDate(LocalDate.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
+
         // TODO: Add reminders and media
-        addNoteViewModel.insertNewNote(newNote)
+        if(note==null){
+            val newNote = Note(title = title, description = description, isTask = isATask,
+                dateCreation = localDateToDate(LocalDate.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
+            addNoteViewModel.insertNewNote(newNote)
+        }else{
+            var updatedNote = note!!
+            updatedNote.title = title
+            updatedNote.description = description
+            updatedNote.isTask = isATask
+            updatedNote.dueDate = dueDate
+            addNoteViewModel.updateNote(updatedNote)
+        }
         finish()
     }
 
