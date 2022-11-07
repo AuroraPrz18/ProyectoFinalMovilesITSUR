@@ -70,6 +70,9 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             dateCreatedTextView.text = note.dateCreation.toString()
             dueDateTextView.text = note.dueDate.toString()
             //editButton.text = // TODO: Write onclick
+            postponeButton.setOnClickListener{
+                onClickListeners.onPostponeClickListener(note)
+            }
             deleteButton.setOnClickListener {
                 onClickListeners.onDeleteClickListener(note)
             }

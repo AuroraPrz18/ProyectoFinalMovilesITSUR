@@ -9,11 +9,11 @@ import java.util.*
 @Entity
 data class Note(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Int = 0,
-    @ColumnInfo(name = "title") val title: String?,
-    @ColumnInfo(name = "description") val description: String?,
-    @ColumnInfo(name = "isTask") val isTask: Boolean?,
+    @ColumnInfo(name = "title") var title: String?,
+    @ColumnInfo(name = "description") var description: String?,
+    @ColumnInfo(name = "isTask") var isTask: Boolean?,
     @ColumnInfo(name = "dateCreation") val dateCreation: Date?,
-    @ColumnInfo(name = "dueDate") val dueDate: Date?,
+    @ColumnInfo(name = "dueDate") var dueDate: Date?,
     @ColumnInfo(name = "isCompleted") var isComplete: Boolean?,
     @ColumnInfo(name = "dateCompleted") val dateCompleted: Date?
 ) : java.io.Serializable
