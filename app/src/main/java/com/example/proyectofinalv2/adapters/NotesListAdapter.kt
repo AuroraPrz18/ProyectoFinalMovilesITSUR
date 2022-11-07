@@ -73,8 +73,11 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             deleteButton.setOnClickListener {
                 onClickListeners.onDeleteClickListener(note)
             }
+            completeImageView.setOnClickListener {
+                onClickListeners.onCompleteClickListener(note)
+            }
             itemView.setOnClickListener{
-                onClickListeners.onShowClickListener(note)
+                //onClickListeners.onShowClickListener(note)
             }
         }
         if(note.isTask == true){

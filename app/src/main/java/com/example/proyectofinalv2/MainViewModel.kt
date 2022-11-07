@@ -23,7 +23,6 @@ class MainViewModel(private val noteDao: NoteDao) : ViewModel() {
     fun insertNewNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.insertNote(note)
     }
-
     fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.updateNote(note)
     }

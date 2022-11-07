@@ -11,7 +11,7 @@ class NoteRepositoryClass(private val  noteDao: NoteDao){
     fun onlyNotes() = noteDao.getNotesOnly()
     suspend fun insertNote(note: Note) = noteDao.insertNote(note)
     suspend fun updateNote(note: Note) = noteDao.updateNote(note)
-    suspend fun deleteNote(note: Note) = noteDao.insertNote(note)
+    suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
     suspend fun getNoteById(id: Int): Note?{
         return noteDao.getNoteById(id)
     }

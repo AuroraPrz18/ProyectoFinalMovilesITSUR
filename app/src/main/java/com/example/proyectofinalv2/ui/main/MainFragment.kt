@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.coroutineScope
@@ -55,7 +56,7 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     }
 
     override fun onDeleteClickListener(note: Note) {
-        //viewModel.deleteNote(note)
+        viewModel.deleteNote(note)
     }
 
     override fun onEditClickListener(note: Note) {
@@ -63,7 +64,13 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     }
 
     override fun onCompleteClickListener(note: Note) {
-        TODO("Not yet implemented")
+        if(note.isComplete == false){
+            var noteAux = note
+            noteAux.isComplete = true
+            viewModel.updateNote(note)
+        }else{
+            Toast.makeText(activity, "Tu ya completaste esta tarea", Toast.LENGTH_LONG)
+        }
     }
 
     override fun onPostponeClickListener(note: Note) {

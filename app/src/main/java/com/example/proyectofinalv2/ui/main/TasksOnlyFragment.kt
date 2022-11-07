@@ -40,7 +40,6 @@ class TasksOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
             adapter = adapterV
         }
 
-
         viewModel.onlyTasks().observe(viewLifecycleOwner){
                 list ->
             adapterV.setData(list as ArrayList<Note>)
@@ -54,7 +53,7 @@ class TasksOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
     }
 
     override fun onDeleteClickListener(note: Note) {
-        //viewModel.deleteNote(note)
+        viewModel.deleteNote(note)
     }
 
     override fun onEditClickListener(note: Note) {
@@ -62,7 +61,13 @@ class TasksOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
     }
 
     override fun onCompleteClickListener(note: Note) {
-        TODO("Not yet implemented")
+        if(note.isComplete == false){
+            var noteAux = note
+            noteAux.isComplete = true
+            viewModel.updateNote(note)
+        }else{
+            Toast.makeText(activity, "Tu ya completaste esta tarea", Toast.LENGTH_LONG)
+        }
     }
 
     override fun onPostponeClickListener(note: Note) {

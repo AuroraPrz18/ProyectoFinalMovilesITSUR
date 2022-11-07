@@ -14,6 +14,6 @@ data class Note(
     @ColumnInfo(name = "isTask") val isTask: Boolean?,
     @ColumnInfo(name = "dateCreation") val dateCreation: Date?,
     @ColumnInfo(name = "dueDate") val dueDate: Date?,
-    @ColumnInfo(name = "isCompleted") val isComplete: Boolean?,
+    @ColumnInfo(name = "isCompleted") var isComplete: Boolean?,
     @ColumnInfo(name = "dateCompleted") val dateCompleted: Date?
 ) : java.io.Serializable
