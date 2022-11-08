@@ -3,24 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mainFragment"
-        android:title="Home"
+        android:title="@string/home"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/notesOnlyFragment"
         android:icon="@drawable/ic_baseline_note_24"
         android:iconTint="@color/white"
-        android:title="Notes"
+        android:title="@string/notes"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/tasksOnlyFragment"
         android:icon="@drawable/ic_baseline_format_list_bulleted_24"
         android:iconTint="@color/white"
-        android:title="Tasks"
+        android:title="@string/tasks"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/notificationsFragment"
-        android:title="Notications"
+        android:title="@string/notications"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_baseline_notifications_24"/>
 </menu>

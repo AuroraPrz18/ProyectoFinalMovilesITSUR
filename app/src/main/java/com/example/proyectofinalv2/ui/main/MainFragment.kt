@@ -3,30 +3,27 @@ package com.example.proyectofinalv2.ui.main
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectofinalv2.*
 import com.example.proyectofinalv2.adapters.NotesListAdapter
-import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.FragmentMainBinding
 import com.example.proyectofinalv2.domain.model.Note
-import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListener {
     private lateinit var binding: FragmentMainBinding
     private val viewModel: MainViewModel by activityViewModels()
+    private lateinit var adapterV: NotesListAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -38,7 +35,7 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
         binding = FragmentMainBinding.bind(view)
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = binding.allNotesRV
-        val adapterV = NotesListAdapter(this@MainFragment)
+        adapterV = NotesListAdapter(this@MainFragment)
         recyclerView?.apply {
             layoutManager =
                 LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -51,6 +48,26 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
             adapterV.setData(list as ArrayList<Note>)
             adapterV.notifyDataSetChanged()
         }
+
+        /*binding.mainSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+            android.widget.SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if(newText!=null && newText!!.length>0){
+                    val list = viewModel.search(newText)
+                    adapterV.setData(list as ArrayList<Note>)
+                    adapterV.notifyDataSetChanged()
+                }else{
+                    val list = viewModel.allNotes()
+                    adapterV.setData(list as ArrayList<Note>)
+                    adapterV.notifyDataSetChanged()
+                }
+                return false
+            }
+            })*/
 
     }
 
@@ -100,5 +117,8 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     fun localDateToDate(localDate: LocalDate): Date? {
         return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
     }
+
+
+
 
 }

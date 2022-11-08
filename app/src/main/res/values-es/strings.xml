@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">ProyectoFinalV2</string>
+    <string name="postpone">Posponer</string>
+    <string name="complete">Completar</string>
+    <string name="noteTitle">Titulo de la nota</string>
+    <string name="noteDescription">Descripción</string>
+    <string name="dueDatePicker">Fecha de vencimiento mm/dd/aaaa</string>
+    <string name="datePickerReminder">Fecha de recordatorio</string>
+    <string name="crear">Crear</string>
+    <string name="media">Subir archivo</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="add_note">Agregar nota</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="edite">Editar</string>
+    <string name="title_activity_add_note">AddNoteActivity</string>
+    <string name="creation_date">Fecha de creación:</string>
+    <string name="due_date">Fecha de entrega:</string>
+    <string name="delete">Eliminar</string>
+    <string name="is_a_task">¿Es una tarea?</string>
+    <string name="title">Título:</string>
+    <string name="home">Inicio</string>
+    <string name="notes">Notas</string>
+    <string name="tasks">Tareas</string>
+    <string name="notications">Notificaciones</string>
+</resources>
