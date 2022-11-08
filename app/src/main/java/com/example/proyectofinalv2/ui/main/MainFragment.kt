@@ -2,6 +2,7 @@ package com.example.proyectofinalv2.ui.main
 
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectofinalv2.*
@@ -19,6 +21,7 @@ import com.example.proyectofinalv2.domain.model.Note
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
+
 
 class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListener {
     private lateinit var binding: FragmentMainBinding
@@ -36,12 +39,17 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
         super.onViewCreated(view, savedInstanceState)
         val recyclerView = binding.allNotesRV
         adapterV = NotesListAdapter(this@MainFragment)
+        var layoutManagerRV: RecyclerView.LayoutManager
+        if(isTablet() == true){
+            layoutManagerRV = GridLayoutManager(activity, 3)
+        }else{
+            layoutManagerRV =
+                    LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        }
         recyclerView?.apply {
-            layoutManager =
-                LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            layoutManager = layoutManagerRV
             adapter = adapterV
         }
-
 
         viewModel.allNotes().observe(viewLifecycleOwner){
             list ->
@@ -69,6 +77,13 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
             }
             })*/
 
+    }
+    fun isTablet(): Boolean {
+        val xlarge = getResources()
+            .getConfiguration().screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+        val large = getResources()
+            .getConfiguration().screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
+        return xlarge || large
     }
 
     override fun onShowClickListener(note: Note) {

@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.main.NotesOnlyFragment"
     android:background="@color/white">
+    <LinearLayout
+        android:id="@+id/fragment_notes_phone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allNotesOnlyRV"

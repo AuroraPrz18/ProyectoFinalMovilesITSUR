@@ -3,18 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".ui.main.TasksOnlyFragment">
+    tools:context=".ui.main.NotesOnlyFragment"
+    android:background="@color/white">
     <LinearLayout
-        android:id="@+id/fragment_tasks_phone"
+        android:id="@+id/fragment_notes_tablet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/allTasksOnlyRV"
+        android:id="@+id/allNotesOnlyRV"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"/>
 
 </FrameLayout>
