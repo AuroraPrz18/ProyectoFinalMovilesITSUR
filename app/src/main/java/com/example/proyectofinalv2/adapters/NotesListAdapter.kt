@@ -1,44 +1,72 @@
 package com.example.proyectofinalv2.adapters
 
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyectofinalv2.R
+import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 
 class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>(){
     var notesList = ArrayList<Note>()
-    fun setData(data: ArrayList<Note>){
+    var mediasList = ArrayList<Multimedia>()
+    fun setData(data: ArrayList<Note>, media:ArrayList<Multimedia>){
         this.notesList = data
+        this.mediasList = media
     }
     class ViewHolder(view: View, val onClick: CardViewClickListener): RecyclerView.ViewHolder(view) {
         val titleTextView : TextView
         val completeImageView: ImageView
         val descriptionTextView : TextView
-        val mediaImageView: ImageView
         val dateCreatedTextView : TextView
         val dueDateTextView1: TextView
         val dueDateTextView : TextView
         val editButton: Button
         val postponeButton: Button
         val deleteButton: Button
+        val photosLayout: LinearLayout
         var currentNote: Note?= null
+
 
         init {
             titleTextView = view.findViewById(R.id.titleTextView)
             completeImageView = view.findViewById(R.id.completeImageView)
             descriptionTextView = view.findViewById(R.id.descriptionTextView)
-            mediaImageView = view.findViewById(R.id.mediaImageView)
             dateCreatedTextView = view.findViewById(R.id.dateCreatedTextView)
             dueDateTextView1 = view.findViewById(R.id.dueDateTextView1)
             dueDateTextView = view.findViewById(R.id.dueDateTextView)
             editButton = view.findViewById(R.id.editButton)
             postponeButton = view.findViewById(R.id.postponeButton)
             deleteButton = view.findViewById(R.id.deleteButton)
+            photosLayout = view.findViewById(R.id.photoLayout)
+        }
+
+        fun getMedia(note: Note, mediasList:ArrayList<Multimedia>){
+            if (photosLayout.getChildCount() > 0)
+                photosLayout.removeAllViews();
+            for (media in mediasList){
+                if(media.type == 1.toLong() && media.noteId == note.id){
+                    val imageView = ImageView(photosLayout.context)
+                    imageView.layoutParams = LinearLayout.LayoutParams(400, 400)
+                    Glide.with(photosLayout.context)
+                        .load(media.path)
+                        .fitCenter()
+                        .skipMemoryCache(true)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .placeholder(R.drawable.placeholder)
+                        .into(imageView);
+                    photosLayout.addView(imageView);
+                }
+            }
         }
 
         interface CardViewClickListener{
@@ -100,6 +128,8 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             holder.postponeButton.visibility = View.GONE
             holder.dueDateTextView1.visibility = View.GONE
         }
+        holder.getMedia(note, mediasList)
+
     }
 
     override fun getItemCount(): Int {

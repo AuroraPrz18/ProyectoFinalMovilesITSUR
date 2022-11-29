@@ -10,10 +10,10 @@ class NoteRepositoryClass(private val  noteDao: NoteDao){
     fun onlyTasks() = noteDao.getTasksOnly()
     fun onlyNotes() = noteDao.getNotesOnly()
     suspend fun search(search: String) = noteDao.getSearch(search)
-    suspend fun insertNote(note: Note) = noteDao.insertNote(note)
+    suspend fun insertNote(note: Note): Long = noteDao.insertNote(note)
     suspend fun updateNote(note: Note) = noteDao.updateNote(note)
     suspend fun deleteNote(note: Note) = noteDao.deleteNote(note)
-    suspend fun getNoteById(id: Int): Note?{
+    suspend fun getNoteById(id: Long): Note?{
         return noteDao.getNoteById(id)
     }
 }

@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(newActivityIntent)
         }
 
-        val viewModelFactory = MainViewModelFactory((application as NoteApp).database!!.noteDao())
+        val viewModelFactory = MainViewModelFactory((application as NoteApp).database!!.noteDao(), (application as NoteApp).database!!.mediaDao())
         viewModel = ViewModelProvider(this, viewModelFactory)[MainViewModel::class.java]
     }
 }

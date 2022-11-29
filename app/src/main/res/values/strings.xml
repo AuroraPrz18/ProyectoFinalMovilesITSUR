@@ -23,4 +23,8 @@
     <string name="notes">Notes</string>
     <string name="tasks">Tasks</string>
     <string name="notications">Notications</string>
+    <string name="reminder_date_mm_dd_yy">Reminder date mm/dd/yy</string>
+    <string name="add_reminder">Add reminder</string>
+    <string name="add_photo">Add photo</string>
+    <string name="add_audio">Add audio</string>
 </resources>

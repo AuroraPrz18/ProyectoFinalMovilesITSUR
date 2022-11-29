@@ -104,33 +104,60 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <!---
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/datePickerReminder"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_date_range_24"
-                app:boxBackgroundColor="@color/text_field_color"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dateReminder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"/>
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/addReminderBtn"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="32dp">
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/reminderBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="Agregar otro recordatorio"
-                style="?attr/borderlessButtonStyle"
-                android:layout_marginRight="8dp" />
-        -->
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/add_reminder"
+                android:src="@drawable/ic_baseline_add_alarm_24"
+                android:tint="#e28743"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="30dp"
+                app:rippleColor="#e28743" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fotoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/add_photo"
+                android:src="@drawable/ic_baseline_camera_alt_24"
+                android:tint="#e28743"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="30dp"
+                app:rippleColor="#e28743" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/videoBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:contentDescription="Add video"
+                android:src="@drawable/ic_baseline_video_call_24"
+                android:tint="#e28743"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="30dp"
+                app:rippleColor="#e28743" />
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/audioBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:contentDescription="@string/add_audio"
+                android:src="@drawable/ic_baseline_keyboard_voice_24"
+                android:tint="#e28743"
+                app:layout_anchor="@id/bottomAppBar"
+                app:maxImageSize="30dp"
+                app:rippleColor="#e28743" />
+
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -161,6 +188,23 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
         </LinearLayout>
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal">
+            <LinearLayout
+                android:id="@+id/layoutPhotos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="32dp">
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+
+
+
 
     </LinearLayout>
 </LinearLayout>

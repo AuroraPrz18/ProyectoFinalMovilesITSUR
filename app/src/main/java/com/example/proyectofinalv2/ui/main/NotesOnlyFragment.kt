@@ -19,6 +19,7 @@ import com.example.proyectofinalv2.R
 import com.example.proyectofinalv2.adapters.NotesListAdapter
 import com.example.proyectofinalv2.databinding.FragmentMainBinding
 import com.example.proyectofinalv2.databinding.FragmentNotesOnlyBinding
+import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -28,6 +29,7 @@ import java.util.*
 class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListener {
     private lateinit var binding: FragmentNotesOnlyBinding
     private val viewModel: MainViewModel by activityViewModels()
+    private var mediasList = ArrayList<Multimedia>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -47,9 +49,13 @@ class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
         }
 
 
+        viewModel.allMedia().observe(viewLifecycleOwner){
+                list ->
+            mediasList = list as ArrayList<Multimedia>
+        }
         viewModel.onlyNotes().observe(viewLifecycleOwner){
                 list ->
-            adapterV.setData(list as ArrayList<Note>)
+            adapterV.setData(list as ArrayList<Note>, mediasList)
             adapterV.notifyDataSetChanged()
         }
 

@@ -20,13 +20,13 @@ interface NoteDao {
     suspend fun getSearch(search: String) : List<Note>
 
     @Query("SELECT * FROM Note WHERE id = :id")
-    suspend fun getNoteById(id:Int) : Note?
+    suspend fun getNoteById(id:Long) : Note?
 
     @Update
     suspend fun updateNote(note: Note)
 
     @Insert
-    suspend fun insertNote(note: Note)
+    suspend fun insertNote(note: Note): Long
 
     @Delete
     suspend fun deleteNote(note: Note)

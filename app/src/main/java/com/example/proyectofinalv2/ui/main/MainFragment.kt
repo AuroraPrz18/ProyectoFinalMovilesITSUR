@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyectofinalv2.*
 import com.example.proyectofinalv2.adapters.NotesListAdapter
 import com.example.proyectofinalv2.databinding.FragmentMainBinding
+import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import java.time.LocalDate
 import java.time.ZoneId
@@ -27,6 +28,7 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     private lateinit var binding: FragmentMainBinding
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var adapterV: NotesListAdapter
+    private var mediasList = ArrayList<Multimedia>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -51,9 +53,13 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
             adapter = adapterV
         }
 
+        viewModel.allMedia().observe(viewLifecycleOwner){
+                list ->
+            mediasList = list as ArrayList<Multimedia>
+        }
         viewModel.allNotes().observe(viewLifecycleOwner){
             list ->
-            adapterV.setData(list as ArrayList<Note>)
+            adapterV.setData(list as ArrayList<Note>, mediasList)
             adapterV.notifyDataSetChanged()
         }
 
