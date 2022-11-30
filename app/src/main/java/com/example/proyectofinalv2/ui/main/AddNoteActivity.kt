@@ -1,5 +1,6 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -24,6 +26,8 @@ import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import com.example.proyectofinalv2.domain.model.Reminder
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -35,6 +39,8 @@ class AddNoteActivity : AppCompatActivity() {
     val photos = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
     val REQUEST_IMAGE_CAPTURE = 1
+    private lateinit var picker: MaterialTimePicker
+    private lateinit var calendar: Calendar
     lateinit var currentPhotoPath: String
     lateinit var currentVideoPath: String
     lateinit var photoURI: Uri
@@ -73,6 +79,7 @@ class AddNoteActivity : AppCompatActivity() {
         }
     }
 
+
     private fun addReminder() {
         val getDate = Calendar.getInstance()
         val datepicker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
@@ -90,6 +97,23 @@ class AddNoteActivity : AppCompatActivity() {
                 reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDate.parse(strDate))))
             },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
         datepicker.show()
+        //showTimePicker()
+    }
+
+    private fun showTimePicker() {
+        picker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(12)
+            .setMinute(0)
+            .build()
+        picker.show(supportFragmentManager, "NOTES_S19120121")
+        picker.addOnPositiveButtonClickListener{
+            calendar = Calendar.getInstance()
+            calendar[Calendar.HOUR_OF_DAY] = picker.hour
+            calendar[Calendar.MINUTE] = picker.minute
+            calendar[Calendar.SECOND] = 0
+            calendar[Calendar.MILLISECOND] = 0
+        }
     }
 
     private fun addReminderText(strDate: String) {
@@ -186,6 +210,7 @@ class AddNoteActivity : AppCompatActivity() {
         }
         finish()
     }
+
 
 
 

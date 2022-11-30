@@ -1,6 +1,10 @@
 package com.example.proyectofinalv2
 
-import android.app.Application
+import android.R
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.*
 import com.example.proyectofinalv2.data.dao.MediaDAO
 import com.example.proyectofinalv2.data.dao.NoteDao
@@ -12,8 +16,8 @@ import com.example.proyectofinalv2.domain.repository.MediaRepositoryClass
 import com.example.proyectofinalv2.domain.repository.NoteRepositoryClass
 import com.example.proyectofinalv2.domain.repository.ReminderRepositoryClass
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
+
 
 class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO, private val reminderDao: ReminderDAO) : ViewModel() {
     private var repository: NoteRepositoryClass = NoteRepositoryClass(noteDao)
@@ -30,7 +34,7 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
     fun deleteNote(note: Note)= viewModelScope.launch(Dispatchers.IO){
         repository.deleteNote(note)
     }
-    fun insertNewNote(note: Note, multimedias: List<Multimedia>, reminders: List<Reminder>) = viewModelScope.launch(Dispatchers.IO){
+    fun insertNewNote(note: Note, multimedias: List<Multimedia>, reminders: List<Reminder>)= viewModelScope.launch(Dispatchers.IO){
         val noteId = repository.insertNote(note)
         for (multimedia in multimedias) {
             multimedia.noteId=noteId
@@ -39,12 +43,13 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
         for (reminder in reminders) {
             reminder.noteId=noteId
             repositoryRemi.insertReminder(reminder)
-            // todo: Agregar alarma
         }
     }
     fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
         repository.updateNote(note)
     }
+
+
 
 }
 
