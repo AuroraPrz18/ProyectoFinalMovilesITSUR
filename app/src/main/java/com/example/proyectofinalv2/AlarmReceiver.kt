@@ -16,63 +16,38 @@ import com.example.proyectofinalv2.domain.model.Note
 import java.time.LocalDate
 import java.util.*
 
+const val notiId = 1
+const val title = "title"
+const val desc = "desc"
+
 class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        /*val bd = (context?.applicationContext  as NoteApp).database
-
-        val noteDao = (context?.applicationContext  as NoteApp ).database?.noteDao()
-        val reminderDao = (context?.applicationContext  as NoteApp ).database?.reminderDao()
-        val reminderData = reminderDao?.getReminders()
-        var needIt = false
-        reminderData?.observeForever {
-            for (item in it){
-                if(item.date?.compareTo(Date(System.currentTimeMillis()))!! <= 0){
-                    //noteDao?.getNoteById(item.noteId)
-                    needIt = true
-                }
-            }
-        }
-
-        if(needIt){*/
-            context?.let { createNotificationChannel(it, null) }
-            when (intent?.action ) {
-                "android.intent.action.BOOT_COMPLETED" -> {
-                    Log.d("SEBOOTEO", "SE HA CARGADO ANDROID");
-                    context?.let { intent?.let {
-                            it1 -> mostrarNotificacion(it, it1) } };
-                }
-                else -> {
-                    context?.let { intent?.let {
-                            it1 -> mostrarNotificacion(it, it1) } };
-                }
-            }
-        //}
+        context?.let { createNotificationChannel(it, null) }
+        mostrarNotificacion(context, intent);
     }
 
-    private fun mostrarNotificacion(context: Context, intent2: Intent) {
-        val intent = Intent(context, MainActivity::class.java)
+    private fun mostrarNotificacion(context: Context?, intent: Intent?) {
+       /* val intent = Intent(context, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP //Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra("id", 1002)
+        intent.putExtra("id", IDS2++)
         var pendingIntent = PendingIntent.getActivity(context, 0,
-                intent, PendingIntent.FLAG_MUTABLE)
+                intent, PendingIntent.FLAG_MUTABLE)*/
 
 
         val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
-            .setContentTitle("Hay una nota pendiente")
-            .setContentText("checala, va?")
-            .setAutoCancel(true)
-            .setDefaults(NotificationCompat.DEFAULT_ALL)
-            .setPriority(NotificationCompat.PRIORITY_HIGH)
-            .setContentIntent(pendingIntent)
-        val notificationManager = NotificationManagerCompat.from(context)
-        notificationManager.notify(IDS, builder.build())
-        IDS++;
+            .setContentTitle(intent?.getStringExtra(title))
+            .setContentText(intent?.getStringExtra(desc))
+            //.setAutoCancel(true)
+            //.setDefaults(NotificationCompat.DEFAULT_ALL)
+            //.setPriority(NotificationCompat.PRIORITY_HIGH)
+            //.setContentIntent(pendingIntent)
+        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.notify(notiId, builder.build())
     }
 
     companion object {
         val CHANNEL_ID = "NOTES_S19120121"
-        var IDS = 1001
         fun createNotificationChannel(context: Context, intent: Intent?) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val name: CharSequence = context.getString(R.string.channel_name)

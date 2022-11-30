@@ -198,13 +198,24 @@ class AddNoteActivity : AppCompatActivity() {
         }
     }
     private fun setUpAlarm() {
-        for(calendar in calendars){
+        for(calendarA in calendars){
+            val intent = Intent(applicationContext, AlarmReceiver::class.java)
+            var titleD = "rrr"
+            var descD = "ddd"
+            intent.putExtra("title", titleD)
+            intent.putExtra("desc", descD)
+
+            var pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                notiId,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
             alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmIntent = Intent(applicationContext, AlarmReceiver::class.java).let { intent ->
-                PendingIntent.getBroadcast(applicationContext, AlarmReceiver.IDS, intent, PendingIntent.FLAG_MUTABLE)
-            }
-            alarmMgr.set(
-                AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent
+            alarmMgr.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                calendarA.timeInMillis,
+                pendingIntent
             )
         }
     }
