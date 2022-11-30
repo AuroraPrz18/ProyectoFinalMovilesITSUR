@@ -10,21 +10,43 @@ import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.proyectofinalv2.data.NoteApp
+import com.example.proyectofinalv2.data.NoteDB
+import com.example.proyectofinalv2.domain.model.Note
+import java.time.LocalDate
+import java.util.*
 
 class AlarmReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
-        context?.let { createNotificationChannel(it, null) }
-        when (intent?.action ) {
-            "android.intent.action.BOOT_COMPLETED" -> {
-                Log.d("SEBOOTEO", "SE HA CARGADO ANDROID");
-                context?.let { intent?.let {
-                        it1 -> mostrarNotificacion(it, it1) } };
-            }
-            else -> {
-                context?.let { intent?.let {
-                        it1 -> mostrarNotificacion(it, it1) } };
+        /*val bd = (context?.applicationContext  as NoteApp).database
+
+        val noteDao = (context?.applicationContext  as NoteApp ).database?.noteDao()
+        val reminderDao = (context?.applicationContext  as NoteApp ).database?.reminderDao()
+        val reminderData = reminderDao?.getReminders()
+        var needIt = false
+        reminderData?.observeForever {
+            for (item in it){
+                if(item.date?.compareTo(Date(System.currentTimeMillis()))!! <= 0){
+                    //noteDao?.getNoteById(item.noteId)
+                    needIt = true
+                }
             }
         }
+
+        if(needIt){*/
+            context?.let { createNotificationChannel(it, null) }
+            when (intent?.action ) {
+                "android.intent.action.BOOT_COMPLETED" -> {
+                    Log.d("SEBOOTEO", "SE HA CARGADO ANDROID");
+                    context?.let { intent?.let {
+                            it1 -> mostrarNotificacion(it, it1) } };
+                }
+                else -> {
+                    context?.let { intent?.let {
+                            it1 -> mostrarNotificacion(it, it1) } };
+                }
+            }
+        //}
     }
 
     private fun mostrarNotificacion(context: Context, intent2: Intent) {

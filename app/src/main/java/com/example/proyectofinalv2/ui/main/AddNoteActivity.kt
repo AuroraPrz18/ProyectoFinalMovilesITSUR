@@ -2,9 +2,12 @@ package com.example.proyectofinalv2.ui.main
 
 import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.view.View
@@ -18,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.proyectofinalv2.AlarmReceiver
 import com.example.proyectofinalv2.MainViewModel
 import com.example.proyectofinalv2.MainViewModelFactory
 import com.example.proyectofinalv2.R
@@ -32,20 +36,25 @@ import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
     val photos = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
+    val calendars = mutableListOf<Calendar>();
     val REQUEST_IMAGE_CAPTURE = 1
     private lateinit var picker: MaterialTimePicker
     private lateinit var calendar: Calendar
     lateinit var currentPhotoPath: String
     lateinit var currentVideoPath: String
     lateinit var photoURI: Uri
+    private lateinit var alarmMgr: AlarmManager
+    private lateinit var alarmIntent: PendingIntent
     private lateinit var binding: ActivityAddNoteBinding
     private var note: Note? = null;
+    private var strDate = ""
     private val addNoteViewModel: MainViewModel by  viewModels {
         MainViewModelFactory((application as NoteApp).database!!.noteDao(),
             (application as NoteApp).database!!.mediaDao(), (application as NoteApp).database!!.reminderDao())
@@ -92,12 +101,16 @@ class AddNoteActivity : AppCompatActivity() {
                 if(strI2.length==1)strI2 = "0"+(i2+1).toString()
                 var strI3 =  i3.toString()
                 if(strI3.length==1)strI3 = "0"+i3.toString()
-                val strDate = (i.toString()+"-"+strI2+"-"+strI3)
-                addReminderText(strDate)
-                reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDate.parse(strDate))))
+                val strDateAux = (i.toString()+"-"+strI2+"-"+strI3)
+                calendar = Calendar.getInstance()
+                calendar[Calendar.YEAR] = i
+                calendar[Calendar.MONTH] = i2
+                calendar[Calendar.DAY_OF_MONTH] = i3
+                strDate = strDateAux
+                showTimePicker()
             },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
         datepicker.show()
-        //showTimePicker()
+
     }
 
     private fun showTimePicker() {
@@ -108,12 +121,33 @@ class AddNoteActivity : AppCompatActivity() {
             .build()
         picker.show(supportFragmentManager, "NOTES_S19120121")
         picker.addOnPositiveButtonClickListener{
-            calendar = Calendar.getInstance()
             calendar[Calendar.HOUR_OF_DAY] = picker.hour
             calendar[Calendar.MINUTE] = picker.minute
             calendar[Calendar.SECOND] = 0
             calendar[Calendar.MILLISECOND] = 0
+            var strI2 =  picker.hour.toString()
+            if(strI2.length==1)strI2 = "0"+picker.hour.toString()
+            var strI3 =  picker.minute.toString()
+            if(strI3.length==1)strI3 = "0"+picker.minute.toString()
+            strDate += "T"+strI2+":"+strI3+":00"//"2007-12-03T10:15:30"
+            addReminderText(strDate)
+            calendars.add(calendar)
+            reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate))))
         }
+    }
+    private fun setUpAlarm() {
+
+        alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
+            PendingIntent.getBroadcast(applicationContext, 1001, intent, PendingIntent.FLAG_MUTABLE)
+        }
+        alarmMgr.setRepeating(
+            AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY, alarmIntent
+            //AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            //SystemClock.elapsedRealtime() + 5 * 1000, 5 * 1000,
+            //alarmIntent
+        )
     }
 
     private fun addReminderText(strDate: String) {
@@ -122,8 +156,8 @@ class AddNoteActivity : AppCompatActivity() {
         binding.remindersLayout.addView(textView);
     }
 
-    fun localDateToDate(localDate: LocalDate): Date? {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+    fun localDateToDate(localDate: LocalDateTime): Date? {
+        return java.util.Date.from(localDate.atZone(ZoneId.systemDefault()).toInstant())
     }
 
     @Throws(IOException::class)
@@ -190,16 +224,18 @@ class AddNoteActivity : AppCompatActivity() {
         var dueDate: Date?
         if (isATask){
             val dueDateStr = binding.dueDate.text.toString()
-            val dueDateStrAux = dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5)
-            val dueDateAux = LocalDate.parse(dueDateStrAux)
+            val dueDateStrAux = dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5)+
+                    "T08:00:00"
+            val dueDateAux = LocalDateTime.parse(dueDateStrAux)
             Toast.makeText(this,dueDateStrAux, Toast.LENGTH_LONG)
             dueDate = localDateToDate(dueDateAux)!!
         }else dueDate = null
 
         if(note==null){
             val newNote = Note(title = title, description = description, isTask = isATask,
-                dateCreation = localDateToDate(LocalDate.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
+                dateCreation = localDateToDate(LocalDateTime.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
             addNoteViewModel.insertNewNote(newNote, photos, reminders)
+            setUpAlarm()
         }else{
             var updatedNote = note!!
             updatedNote.title = title
@@ -207,6 +243,7 @@ class AddNoteActivity : AppCompatActivity() {
             updatedNote.isTask = isATask
             updatedNote.dueDate = dueDate
             addNoteViewModel.updateNote(updatedNote)
+
         }
         finish()
     }
