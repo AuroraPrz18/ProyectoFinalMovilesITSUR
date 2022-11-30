@@ -87,7 +87,10 @@ class AddNoteActivity : AppCompatActivity() {
                 if(strI3.length==1)strI3 = "0"+i3.toString()
                 val strDate = (i.toString()+"-"+strI2+"-"+strI3)
                 addReminderText(strDate)
+<<<<<<< HEAD
                 reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDate.parse(strDate))))
+=======
+>>>>>>> 5758d5c32ec951eb5bc0d3fb92c1cff654596bc5
             },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
         datepicker.show()
     }
