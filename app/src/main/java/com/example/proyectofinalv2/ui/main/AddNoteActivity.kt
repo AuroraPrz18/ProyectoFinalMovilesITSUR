@@ -1,29 +1,36 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.Manifest
 import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.example.proyectofinalv2.AlarmReceiver
-import com.example.proyectofinalv2.MainViewModel
-import com.example.proyectofinalv2.MainViewModelFactory
-import com.example.proyectofinalv2.R
+import com.example.proyectofinalv2.*
 import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import com.example.proyectofinalv2.domain.model.Reminder
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import java.io.File
@@ -32,13 +39,21 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
-
+private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 class AddNoteActivity : AppCompatActivity() {
     val media = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
     val calendars = mutableListOf<Calendar>();
+    lateinit var requestPermissionLauncher: ActivityResultLauncher<String>
     private val REQUEST_IMAGE_CAPTURE = 1
     private val REQUEST_VIDEO_CAPTURE = 2
+    private val REQUEST_AUDIO_CAPTURE = 3
+    private var fileName: String = ""
+    private var recorder: MediaRecorder? = null
+    private var player: MediaPlayer? = null
+    private var permissionToRecordAccepted = false
+    private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO,
+        "android.permission.WRITE_EXTERNAL_STORAGE")
     lateinit var mediaController: MediaController
     private lateinit var picker: MaterialTimePicker
     private lateinit var calendar: Calendar
@@ -60,12 +75,21 @@ class AddNoteActivity : AppCompatActivity() {
 
         binding = ActivityAddNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        requestPermissionLauncher =
+            registerForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { isGranted: Boolean ->
+                if (isGranted) {
+                } else {
+                }
+            }
 
         binding.dueDateWrapper.visibility = View.GONE
         binding.cancelar.setOnClickListener{finish()}
         binding.crear.setOnClickListener{createNote()}
         binding.fotoBtn.setOnClickListener{addPhoto()}
         binding.videoBtn.setOnClickListener{addVideo()}
+        //binding.audioBtn.setOnClickListener{addAudio()}
         binding.reminderBtn.setOnClickListener{addReminder()}
         binding.isTaskSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if(b){
@@ -86,6 +110,23 @@ class AddNoteActivity : AppCompatActivity() {
         mediaController = MediaController(this)
         mediaController.setAnchorView(
             binding.root);
+    }
+
+    var isRecording = true
+    var isPlaying = true
+    private fun addAudio() {
+        askForPermission()
+        onRecord(isRecording)
+        isRecording = !isRecording
+        val button = Button(this)
+        button.layoutParams = LinearLayout.LayoutParams(200, 200)
+        button.setText("|>")
+        button.setOnClickListener {
+            onPlay(isPlaying)
+        }
+        isPlaying = !isPlaying
+        binding.audiosLayout.addView(button);
+        media.add(Multimedia(noteId = -1, type = REQUEST_AUDIO_CAPTURE.toLong(), path = fileName));
     }
 
     private fun addVideo() {
@@ -157,14 +198,15 @@ class AddNoteActivity : AppCompatActivity() {
         }
     }
     private fun setUpAlarm() {
-
-        alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmIntent = Intent(applicationContext, AlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(applicationContext, 1001, intent, PendingIntent.FLAG_MUTABLE)
+        for(calendar in calendars){
+            alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmIntent = Intent(applicationContext, AlarmReceiver::class.java).let { intent ->
+                PendingIntent.getBroadcast(applicationContext, AlarmReceiver.IDS, intent, PendingIntent.FLAG_MUTABLE)
+            }
+            alarmMgr.set(
+                AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent
+            )
         }
-        alarmMgr.set(
-            AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent
-        )
     }
 
     private fun addReminderText(strDate: String) {
@@ -275,7 +317,181 @@ class AddNoteActivity : AppCompatActivity() {
         finish()
     }
 
+    // Audiooo
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            1001 -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED &&
+                            grantResults[1] == PackageManager.PERMISSION_GRANTED
+                            )) {
+                    startRecordingAudio()
+                } else {
+                    Toast.makeText(this, "No cuenta con los permisos suficientes", Toast.LENGTH_LONG)
+                }
+                return
+            }
+        }
+    }
+
+    private fun startRecordingAudio() {
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            createAudioFile()
+            setOutputFile(fileName)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+            try {
+                prepare()
+            } catch (e: IOException) {
+                Log.e("Audio", "prepare() failed")
+            }
+            start()
+        }
+    }
+
+    @Throws(IOException::class)
+    fun createAudioFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File? =
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC)
+        return File.createTempFile(
+            "AUDIO_${timeStamp}_", /* prefix */
+            ".mp3", /* suffix */
+            storageDir /* directory */
+        ).apply {
+            fileName = absolutePath
+        }
+    }
+
+    private fun onRecord(start: Boolean) = if (start) {
+        startRecording()
+    } else {
+        Toast.makeText(this, "Grabado", Toast.LENGTH_LONG)
+        stopRecording()
+    }
+
+    private fun onPlay(start: Boolean) = if (start) {
+        startPlaying()
+    } else {
+        stopPlaying()
+    }
+
+    private fun startPlaying() {
+        player = MediaPlayer().apply {
+            try {
+                setDataSource(fileName)
+                prepare()
+                start()
+            } catch (e: IOException) {
+                Log.e("Audio", "prepare() failed")
+            }
+        }
+    }
+
+    private fun stopPlaying() {
+        player?.release()
+        player = null
+    }
+    private fun askForPermission() {
+        when {
+            ContextCompat.checkSelfPermission(
+                applicationContext,
+                "android.permission.RECORD_AUDIO"
+            ) == PackageManager.PERMISSION_GRANTED -> {
+
+            }
+            shouldShowRequestPermissionRationale("android.permission.RECORD_AUDIO") -> {
+                MaterialAlertDialogBuilder(this
+                )
+                    .setTitle("Title")
+                    .setMessage("Debes dar perimso para grabar audios")
+                    .setNegativeButton("Cancel") { dialog, which ->
+                        // Respond to negative button press
+                    }
+                    .setPositiveButton("OK") { dialog, which ->
+                        requestPermissions(
+                            arrayOf("android.permission.RECORD_AUDIO",
+                                "android.permission.WRITE_EXTERNAL_STORAGE"),
+                            1001)
+
+                    }
+                    .show()
+            }
+            else -> {
+                requestPermissions(
+                    arrayOf("android.permission.RECORD_AUDIO",
+                        "android.permission.WRITE_EXTERNAL_STORAGE"),
+                    1001)
+            }
+        }
+    }
+
+    private fun startRecording() {
+        recorder = MediaRecorder().apply {
+            setAudioSource(MediaRecorder.AudioSource.MIC)
+            setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
+            setOutputFile(fileName)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+
+            try {
+                prepare()
+            } catch (e: IOException) {
+                Log.e("Audio", "prepare() failed")
+            }
+
+            start()
+        }
+    }
+
+    private fun stopRecording() {
+        recorder?.apply {
+            stop()
+            release()
+        }
+        recorder = null
+    }
 
 
 
+    /*override fun onCreate(icicle: Bundle?) {
+        super.onCreate(icicle)
+
+        // Record to the external cache directory for visibility
+        fileName = "${externalCacheDir.absolutePath}/audiorecordtest.3gp"
+
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
+
+        recordButton = RecordButton(this)
+        playButton = PlayButton(this)
+        val ll = LinearLayout(this).apply {
+            addView(recordButton,
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    0f))
+            addView(playButton,
+                LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    0f))
+        }
+        setContentView(ll)
+    }*/
+
+    override fun onStop() {
+        super.onStop()
+        recorder?.release()
+        recorder = null
+        player?.release()
+        player = null
+    }
 }
+
+

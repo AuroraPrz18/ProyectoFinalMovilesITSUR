@@ -66,11 +66,13 @@ class AlarmReceiver: BroadcastReceiver() {
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setContentIntent(pendingIntent)
         val notificationManager = NotificationManagerCompat.from(context)
-        notificationManager.notify(1001, builder.build())
+        notificationManager.notify(IDS, builder.build())
+        IDS++;
     }
 
     companion object {
         val CHANNEL_ID = "NOTES_S19120121"
+        var IDS = 1001
         fun createNotificationChannel(context: Context, intent: Intent?) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val name: CharSequence = context.getString(R.string.channel_name)
