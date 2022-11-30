@@ -159,15 +159,11 @@ class AddNoteActivity : AppCompatActivity() {
     private fun setUpAlarm() {
 
         alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmIntent = Intent(this, AlarmReceiver::class.java).let { intent ->
+        alarmIntent = Intent(applicationContext, AlarmReceiver::class.java).let { intent ->
             PendingIntent.getBroadcast(applicationContext, 1001, intent, PendingIntent.FLAG_MUTABLE)
         }
-        alarmMgr.setRepeating(
-            AlarmManager.RTC_WAKEUP, calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY, alarmIntent
-            //AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            //SystemClock.elapsedRealtime() + 5 * 1000, 5 * 1000,
-            //alarmIntent
+        alarmMgr.set(
+            AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent
         )
     }
 
@@ -266,7 +262,7 @@ class AddNoteActivity : AppCompatActivity() {
             val newNote = Note(title = title, description = description, isTask = isATask,
                 dateCreation = localDateToDate(LocalDateTime.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
             addNoteViewModel.insertNewNote(newNote, media, reminders)
-            //setUpAlarm()
+            setUpAlarm()
         }else{
             var updatedNote = note!!
             updatedNote.title = title
