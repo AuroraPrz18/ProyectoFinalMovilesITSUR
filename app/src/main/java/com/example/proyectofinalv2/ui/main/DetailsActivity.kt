@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
@@ -16,14 +17,17 @@ import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityDetailsBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
+import com.example.proyectofinalv2.domain.model.Reminder
 import java.util.ArrayList
 
 class DetailsActivity : AppCompatActivity() {
     private var note: Note? = null;
     private var mediasList = ArrayList<Multimedia>()
+    private var remindersList = ArrayList<Reminder>()
     private lateinit var binding: ActivityDetailsBinding
     private val viewModel: MainViewModel by  viewModels {
-        MainViewModelFactory((application as NoteApp).database!!.noteDao(), (application as NoteApp).database!!.mediaDao())
+        MainViewModelFactory((application as NoteApp).database!!.noteDao(),
+            (application as NoteApp).database!!.mediaDao(), (application as NoteApp).database!!.reminderDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +61,24 @@ class DetailsActivity : AppCompatActivity() {
                 mediasList = intent.getSerializableExtra("media") as ArrayList<Multimedia>;
                 getMedia()
             }
+            if(intent.hasExtra("reminder")){
+                remindersList = intent.getSerializableExtra("reminder") as ArrayList<Reminder>;
+                getReminder()
+            }
 
+        }
+    }
+
+    private fun getReminder() {
+        if(note!=null && remindersList!=null){
+
+            for (reminder in remindersList){
+                if(reminder.noteId == note!!.id){
+                    val textView = TextView(binding.remindersLayout.context)
+                    textView.setText(reminder.date.toString())
+                    binding.remindersLayout.addView(textView);
+                }
+            }
         }
     }
 

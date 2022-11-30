@@ -6,10 +6,10 @@ import com.example.proyectofinalv2.domain.model.Reminder
 @Dao
 interface ReminderDAO {
     @Query("SELECT * FROM Reminder;")
-    fun getReminders() : List<Reminder>
+    fun getReminders() : LiveData<List<Reminder>>
 
     @Query("SELECT * FROM Reminder WHERE noteId = :noteId;")
-    fun getRemindersForNote(noteId:Long) : List<Reminder>
+    fun getRemindersForNote(noteId:Long) :LiveData<List<Reminder>>
 
     @Query("SELECT * FROM Reminder WHERE id = :id;")
     suspend fun getReminderById(id:Long) : Reminder?

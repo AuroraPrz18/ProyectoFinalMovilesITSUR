@@ -16,195 +16,201 @@
         android:background="@color/menu_bar"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme" />
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="8dp">
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/noteTitle"
-            android:layout_marginTop="30dp"
-            android:padding="8dp"
-            app:boxBackgroundColor="@color/text_field_color"
-            app:startIconDrawable="@drawable/ic_baseline_title_24"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/titleEditView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_field"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/noteDescription"
-            android:padding="8dp"
-            app:boxBackgroundColor="@color/text_field_color"
-            app:startIconDrawable="@drawable/ic_baseline_subtitles_24"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/descriptionEditView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_field"
-                android:inputType="textMultiLine"
-                android:lines="8"
-                android:minLines="1"
-                android:gravity="top|start"
-                android:maxLines="20"
-                android:scrollbars="vertical"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <!---
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/media"
-            android:padding="8dp"
-            app:boxBackgroundColor="@color/text_field_color"
-            app:startIconDrawable="@drawable/ic_baseline_perm_media_24"
-            android:textSize="@dimen/text_field"
-            >
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-        -->
-
-        <Switch
-            android:id="@+id/isTaskSwitch"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="48dp"
-            android:text="@string/is_a_task"
-            android:textSize="@dimen/text_field"/>
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dueDateWrapper"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/dueDatePicker"
-            android:padding="8dp"
-            app:startIconDrawable="@drawable/ic_baseline_date_range_24"
-            app:boxBackgroundColor="@color/text_field_color"
-            >
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dueDate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="32dp">
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/reminderBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:contentDescription="@string/add_reminder"
-                android:src="@drawable/ic_baseline_add_alarm_24"
-                android:tint="#e28743"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="30dp"
-                app:rippleColor="#e28743" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fotoBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:contentDescription="@string/add_photo"
-                android:src="@drawable/ic_baseline_camera_alt_24"
-                android:tint="#e28743"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="30dp"
-                app:rippleColor="#e28743" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/videoBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:contentDescription="Add video"
-                android:src="@drawable/ic_baseline_video_call_24"
-                android:tint="#e28743"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="30dp"
-                app:rippleColor="#e28743" />
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/audioBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                android:contentDescription="@string/add_audio"
-                android:src="@drawable/ic_baseline_keyboard_voice_24"
-                android:tint="#e28743"
-                app:layout_anchor="@id/bottomAppBar"
-                app:maxImageSize="30dp"
-                app:rippleColor="#e28743" />
-
-
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="32dp">
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/crear"
-                style="?attr/borderlessButtonStyle"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="8dp">
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/crear"
-                android:textColor="@color/menu_bar"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:hint="@string/noteTitle"
+                android:layout_marginTop="30dp"
+                android:padding="8dp"
+                app:boxBackgroundColor="@color/text_field_color"
+                app:startIconDrawable="@drawable/ic_baseline_title_24"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/titleEditView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_field"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/cancelar"
-                style="?attr/borderlessButtonStyle"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/cancelar"
-                android:textColor="#D85353"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:hint="@string/noteDescription"
+                android:padding="8dp"
+                app:boxBackgroundColor="@color/text_field_color"
+                app:startIconDrawable="@drawable/ic_baseline_subtitles_24"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/descriptionEditView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_field"
+                    android:inputType="textMultiLine"
+                    android:lines="8"
+                    android:minLines="1"
+                    android:gravity="top|start"
+                    android:maxLines="20"
+                    android:scrollbars="vertical"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:scrollbars="horizontal">
+            <!---
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/media"
+                android:padding="8dp"
+                app:boxBackgroundColor="@color/text_field_color"
+                app:startIconDrawable="@drawable/ic_baseline_perm_media_24"
+                android:textSize="@dimen/text_field"
+                >
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+            -->
+
+            <Switch
+                android:id="@+id/isTaskSwitch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:text="@string/is_a_task"
+                android:textSize="@dimen/text_field"/>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/dueDateWrapper"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/dueDatePicker"
+                android:padding="8dp"
+                app:startIconDrawable="@drawable/ic_baseline_date_range_24"
+                app:boxBackgroundColor="@color/text_field_color"
+                >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/dueDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
-                android:id="@+id/layoutPhotos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="32dp">
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/reminderBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/add_reminder"
+                    android:src="@drawable/ic_baseline_add_alarm_24"
+                    android:tint="#e28743"
+                    app:layout_anchor="@id/bottomAppBar"
+                    app:maxImageSize="30dp"
+                    app:rippleColor="#e28743" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fotoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/add_photo"
+                    android:src="@drawable/ic_baseline_camera_alt_24"
+                    android:tint="#e28743"
+                    app:layout_anchor="@id/bottomAppBar"
+                    app:maxImageSize="30dp"
+                    app:rippleColor="#e28743" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/videoBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="Add video"
+                    android:src="@drawable/ic_baseline_video_call_24"
+                    android:tint="#e28743"
+                    app:layout_anchor="@id/bottomAppBar"
+                    app:maxImageSize="30dp"
+                    app:rippleColor="#e28743" />
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/audioBtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:contentDescription="@string/add_audio"
+                    android:src="@drawable/ic_baseline_keyboard_voice_24"
+                    android:tint="#e28743"
+                    app:layout_anchor="@id/bottomAppBar"
+                    app:maxImageSize="30dp"
+                    app:rippleColor="#e28743" />
+
+
+
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="32dp">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/crear"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/crear"
+                    android:textColor="@color/menu_bar"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancelar"
+                    style="?attr/borderlessButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/cancelar"
+                    android:textColor="#D85353"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
+            </LinearLayout>
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="horizontal">
+                <LinearLayout
+                    android:id="@+id/layoutPhotos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="32dp">
+                </LinearLayout>
 
+            </androidx.core.widget.NestedScrollView>
+            <LinearLayout
+                android:id="@+id/remindersLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"/>
+        </LinearLayout>
 
+    </ScrollView>
 
-    </LinearLayout>
 </LinearLayout>

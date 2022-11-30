@@ -78,6 +78,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"/>
+
                 </androidx.core.widget.NestedScrollView>
 
 
@@ -119,6 +120,11 @@
                         android:textColor="@color/gray_text_color"
                         tools:text="01/02/2022" />
                 </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/remindersLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"/>
 
 
             </LinearLayout>

@@ -15,13 +15,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyectofinalv2.R
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
+import com.example.proyectofinalv2.domain.model.Reminder
 
 class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) : RecyclerView.Adapter<NotesListAdapter.ViewHolder>(){
     var notesList = ArrayList<Note>()
     var mediasList = ArrayList<Multimedia>()
-    fun setData(data: ArrayList<Note>, media:ArrayList<Multimedia>){
+    var remindersList = ArrayList<Reminder>()
+    fun setData(data: ArrayList<Note>, media:ArrayList<Multimedia>, reminders:ArrayList<Reminder>){
         this.notesList = data
         this.mediasList = media
+        this.remindersList = reminders
     }
     class ViewHolder(view: View, val onClick: CardViewClickListener): RecyclerView.ViewHolder(view) {
         val titleTextView : TextView
@@ -34,6 +37,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
         val postponeButton: Button
         val deleteButton: Button
         val photosLayout: LinearLayout
+        val remindersLayout: LinearLayout
         var currentNote: Note?= null
 
 
@@ -48,6 +52,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             postponeButton = view.findViewById(R.id.postponeButton)
             deleteButton = view.findViewById(R.id.deleteButton)
             photosLayout = view.findViewById(R.id.photoLayout)
+            remindersLayout = view.findViewById(R.id.remindersLayout)
         }
 
         fun getMedia(note: Note, mediasList:ArrayList<Multimedia>){
@@ -65,6 +70,18 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
                         .placeholder(R.drawable.placeholder)
                         .into(imageView);
                     photosLayout.addView(imageView);
+                }
+            }
+        }
+
+        fun getReminders(note: Note, remindersList:ArrayList<Reminder>){
+            if (remindersLayout.getChildCount() > 0)
+                remindersLayout.removeAllViews();
+            for (reminder in remindersList){
+                if(reminder.noteId == note.id){
+                    val textView = TextView(remindersLayout.context)
+                    textView.setText(reminder.date.toString())
+                    remindersLayout.addView(textView);
                 }
             }
         }
@@ -129,6 +146,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             holder.dueDateTextView1.visibility = View.GONE
         }
         holder.getMedia(note, mediasList)
+        holder.getReminders(note, remindersList)
 
     }
 

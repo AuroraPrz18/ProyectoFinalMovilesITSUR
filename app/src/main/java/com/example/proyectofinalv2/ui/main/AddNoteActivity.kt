@@ -1,12 +1,15 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +23,7 @@ import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
+import com.example.proyectofinalv2.domain.model.Reminder
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -29,6 +33,7 @@ import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
     val photos = mutableListOf<Multimedia>();
+    val reminders = mutableListOf<Reminder>();
     val REQUEST_IMAGE_CAPTURE = 1
     lateinit var currentPhotoPath: String
     lateinit var currentVideoPath: String
@@ -36,7 +41,8 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddNoteBinding
     private var note: Note? = null;
     private val addNoteViewModel: MainViewModel by  viewModels {
-        MainViewModelFactory((application as NoteApp).database!!.noteDao(), (application as NoteApp).database!!.mediaDao())
+        MainViewModelFactory((application as NoteApp).database!!.noteDao(),
+            (application as NoteApp).database!!.mediaDao(), (application as NoteApp).database!!.reminderDao())
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +55,7 @@ class AddNoteActivity : AppCompatActivity() {
         binding.cancelar.setOnClickListener{finish()}
         binding.crear.setOnClickListener{createNote()}
         binding.fotoBtn.setOnClickListener{addPhoto()}
+        binding.reminderBtn.setOnClickListener{addReminder()}
         binding.isTaskSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if(b){
                 binding.dueDateWrapper.visibility = View.VISIBLE
@@ -65,6 +72,36 @@ class AddNoteActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun addReminder() {
+        val getDate = Calendar.getInstance()
+        val datepicker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+            DatePickerDialog.OnDateSetListener{ datePicker, i, i2, i3 ->
+                val selectDate: Calendar = Calendar.getInstance()
+                selectDate.set(Calendar.YEAR, i)
+                selectDate.set(Calendar.MONTH, i2)
+                selectDate.set(Calendar.DAY_OF_MONTH, i3)
+                var strI2 =  (i2+1).toString()
+                if(strI2.length==1)strI2 = "0"+(i2+1).toString()
+                var strI3 =  i3.toString()
+                if(strI3.length==1)strI3 = "0"+i3.toString()
+                val strDate = (i.toString()+"-"+strI2+"-"+strI3)
+                addReminderText(strDate)
+                reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDate.parse(strDate))))
+            },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
+        datepicker.show()
+    }
+
+    private fun addReminderText(strDate: String) {
+        val textView = TextView(this)
+        textView.setText(strDate)
+        binding.remindersLayout.addView(textView);
+    }
+
+    fun localDateToDate(localDate: LocalDate): Date? {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+    }
+
     @Throws(IOException::class)
     fun createFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -117,7 +154,6 @@ class AddNoteActivity : AppCompatActivity() {
                 .into(imageView);
             binding.layoutPhotos.addView(imageView);
             photos.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
-            Toast.makeText(this, photos.toString(), Toast.LENGTH_LONG).show()
         }
     }
 
@@ -136,12 +172,10 @@ class AddNoteActivity : AppCompatActivity() {
             dueDate = localDateToDate(dueDateAux)!!
         }else dueDate = null
 
-
-        // TODO: Add reminders and media
         if(note==null){
             val newNote = Note(title = title, description = description, isTask = isATask,
                 dateCreation = localDateToDate(LocalDate.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
-            addNoteViewModel.insertNewNote(newNote, photos)
+            addNoteViewModel.insertNewNote(newNote, photos, reminders)
         }else{
             var updatedNote = note!!
             updatedNote.title = title
@@ -155,7 +189,4 @@ class AddNoteActivity : AppCompatActivity() {
 
 
 
-    fun localDateToDate(localDate: LocalDate): Date? {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-    }
 }

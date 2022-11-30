@@ -17,6 +17,7 @@ import com.example.proyectofinalv2.adapters.NotesListAdapter
 import com.example.proyectofinalv2.databinding.FragmentNotesOnlyBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
+import com.example.proyectofinalv2.domain.model.Reminder
 import java.time.LocalDate
 import java.time.ZoneId
 import java.util.*
@@ -25,6 +26,7 @@ class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
     private lateinit var binding: FragmentNotesOnlyBinding
     private val viewModel: MainViewModel by activityViewModels()
     private var mediasList = ArrayList<Multimedia>()
+    private var remindersList = ArrayList<Reminder>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -48,9 +50,13 @@ class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
                 list ->
             mediasList = list as ArrayList<Multimedia>
         }
+        viewModel.allReminders().observe(viewLifecycleOwner){
+                list ->
+            remindersList = list as ArrayList<Reminder>
+        }
         viewModel.onlyNotes().observe(viewLifecycleOwner){
                 list ->
-            adapterV.setData(list as ArrayList<Note>, mediasList)
+            adapterV.setData(list as ArrayList<Note>, mediasList, remindersList)
             adapterV.notifyDataSetChanged()
         }
 
@@ -59,6 +65,7 @@ class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
     override fun onShowClickListener(note: Note) {
         val intent = Intent(activity, DetailsActivity::class.java)
         intent.putExtra("media", mediasList)
+        intent.putExtra("reminder", remindersList)
         intent.putExtra("note", note)
         startActivity(intent)
     }
