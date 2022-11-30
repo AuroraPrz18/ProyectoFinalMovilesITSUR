@@ -1,11 +1,9 @@
-package com.example.proyectofinalv2
+package com.example.proyectofinalv2.ui.main
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,17 +11,15 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.example.proyectofinalv2.MainViewModel
+import com.example.proyectofinalv2.MainViewModelFactory
+import com.example.proyectofinalv2.R
 import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat

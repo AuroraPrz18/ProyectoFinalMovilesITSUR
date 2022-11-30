@@ -109,7 +109,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
                 onClickListeners.onCompleteClickListener(note)
             }
             itemView.setOnClickListener{
-                //onClickListeners.onShowClickListener(note)
+                onClickListeners.onShowClickListener(note)
             }
         }
         if(note.isTask == true){

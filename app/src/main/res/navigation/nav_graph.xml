@@ -14,28 +14,14 @@
             android:id="@+id/action_mainFragment_to_notesOnlyFragment"
             app:destination="@id/notesOnlyFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_notesOnlyFragment2"
             app:popUpTo="@id/notesOnlyFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/detailsFragment"
-        android:name="com.example.proyectofinalv2.ui.main.DetailsFragment"
-        android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
     <fragment
         android:id="@+id/notesOnlyFragment"
         android:name="com.example.proyectofinalv2.ui.main.NotesOnlyFragment"
         android:label="fragment_notes_only"
         tools:layout="@layout/fragment_notes_only" >
-        <action
-            android:id="@+id/action_notesOnlyFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
-            android:id="@+id/action_notesOnlyFragment_to_detailsFragment2"
-            app:destination="@id/detailsFragment" />
         <action
             android:id="@+id/action_notesOnlyFragment_to_tasksOnlyFragment"
             app:destination="@id/tasksOnlyFragment" />
@@ -49,9 +35,6 @@
         android:label="fragment_tasks_only"
         tools:layout="@layout/fragment_tasks_only" >
         <action
-            android:id="@+id/action_tasksOnlyFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
             android:id="@+id/action_tasksOnlyFragment_to_notificationsFragment"
             app:destination="@id/notificationsFragment" />
         <action
@@ -64,15 +47,17 @@
         android:label="fragment_notifications"
         tools:layout="@layout/fragment_notifications" >
         <action
-            android:id="@+id/action_notificationsFragment_to_detailsFragment"
-            app:destination="@id/detailsFragment" />
-        <action
             android:id="@+id/action_notificationsFragment_to_mainFragment"
             app:popUpTo="@id/mainFragment" />
     </fragment>
     <activity
         android:id="@+id/addNoteActivity"
-        android:name="com.example.proyectofinalv2.AddNoteActivity"
+        android:name="com.example.proyectofinalv2.ui.main.AddNoteActivity"
         android:label="activity_add_note"
         tools:layout="@layout/activity_add_note" />
+    <activity
+        android:id="@+id/detailsActivity"
+        android:name="com.example.proyectofinalv2.ui.main.DetailsActivity"
+        android:label="activity_details"
+        tools:layout="@layout/activity_details" />
 </navigation>

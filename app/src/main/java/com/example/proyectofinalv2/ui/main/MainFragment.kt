@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
@@ -93,7 +92,10 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     }
 
     override fun onShowClickListener(note: Note) {
-        TODO("Not yet implemented")
+        val intent = Intent(activity, DetailsActivity::class.java)
+        intent.putExtra("media", mediasList)
+        intent.putExtra("note", note)
+        startActivity(intent)
     }
 
     override fun onDeleteClickListener(note: Note) {
