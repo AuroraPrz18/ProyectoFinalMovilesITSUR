@@ -38,6 +38,8 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
         val deleteButton: Button
         val photosLayout: LinearLayout
         val remindersLayout: LinearLayout
+        val videoImage:ImageView
+        val audioImage:ImageView
         var currentNote: Note?= null
 
 
@@ -53,11 +55,15 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
             deleteButton = view.findViewById(R.id.deleteButton)
             photosLayout = view.findViewById(R.id.photoLayout)
             remindersLayout = view.findViewById(R.id.remindersLayout)
+            videoImage = view.findViewById(R.id.videoImageView)
+            audioImage = view.findViewById(R.id.audioImageView)
         }
 
         fun getMedia(note: Note, mediasList:ArrayList<Multimedia>){
             if (photosLayout.getChildCount() > 0)
                 photosLayout.removeAllViews();
+            videoImage.visibility = View.GONE
+            audioImage.visibility = View.GONE
             for (media in mediasList){
                 if(media.type == 1.toLong() && media.noteId == note.id){
                     val imageView = ImageView(photosLayout.context)
@@ -70,6 +76,10 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
                         .placeholder(R.drawable.placeholder)
                         .into(imageView);
                     photosLayout.addView(imageView);
+                }else  if(media.type == 2.toLong() && media.noteId == note.id){
+                    videoImage.visibility = View.VISIBLE
+                }else  if(media.type == 2.toLong() && media.noteId == note.id){
+                    audioImage.visibility = View.VISIBLE
                 }
             }
         }

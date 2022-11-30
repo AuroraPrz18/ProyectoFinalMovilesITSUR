@@ -7,17 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
-import android.provider.CalendarContract
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -35,16 +29,17 @@ import com.google.android.material.timepicker.TimeFormat
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 
 class AddNoteActivity : AppCompatActivity() {
-    val photos = mutableListOf<Multimedia>();
+    val media = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
     val calendars = mutableListOf<Calendar>();
-    val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_VIDEO_CAPTURE = 2
+    lateinit var mediaController: MediaController
     private lateinit var picker: MaterialTimePicker
     private lateinit var calendar: Calendar
     lateinit var currentPhotoPath: String
@@ -70,6 +65,7 @@ class AddNoteActivity : AppCompatActivity() {
         binding.cancelar.setOnClickListener{finish()}
         binding.crear.setOnClickListener{createNote()}
         binding.fotoBtn.setOnClickListener{addPhoto()}
+        binding.videoBtn.setOnClickListener{addVideo()}
         binding.reminderBtn.setOnClickListener{addReminder()}
         binding.isTaskSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if(b){
@@ -84,6 +80,31 @@ class AddNoteActivity : AppCompatActivity() {
             binding.apply {
                 titleEditView.setText(note!!.title)
                 descriptionEditView.setText(note!!.description)
+            }
+        }
+
+        mediaController = MediaController(this)
+        mediaController.setAnchorView(
+            binding.root);
+    }
+
+    private fun addVideo() {
+        Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
+            takeVideoIntent.resolveActivity(packageManager)?.also {
+                val videoFile: File? = try {
+                    createFile()
+                } catch (ex: IOException) {
+                    null
+                }
+                videoFile?.also {
+                    photoURI = FileProvider.getUriForFile(
+                        this,
+                        "com.example.proyectofinalv2.fileprovider",
+                        it
+                    )
+                    takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                    startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
+                }
             }
         }
     }
@@ -211,7 +232,17 @@ class AddNoteActivity : AppCompatActivity() {
                 .placeholder(R.drawable.placeholder)
                 .into(imageView);
             binding.layoutPhotos.addView(imageView);
-            photos.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
+            media.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
+        }else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
+            val videoView = VideoView(this)
+            videoView.layoutParams = LinearLayout.LayoutParams(400, 400)
+            videoView.setVideoURI(photoURI)
+            videoView.start()
+            val mediacontrolleralone = MediaController(this)
+            mediacontrolleralone.setAnchorView(videoView)
+            videoView.setMediaController(mediacontrolleralone)
+            binding.videosLayout.addView(videoView);
+            media.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = photoURI.toString()));
         }
     }
 
@@ -234,8 +265,8 @@ class AddNoteActivity : AppCompatActivity() {
         if(note==null){
             val newNote = Note(title = title, description = description, isTask = isATask,
                 dateCreation = localDateToDate(LocalDateTime.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
-            addNoteViewModel.insertNewNote(newNote, photos, reminders)
-            setUpAlarm()
+            addNoteViewModel.insertNewNote(newNote, media, reminders)
+            //setUpAlarm()
         }else{
             var updatedNote = note!!
             updatedNote.title = title

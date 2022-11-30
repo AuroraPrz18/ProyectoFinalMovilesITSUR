@@ -2,9 +2,7 @@ package com.example.proyectofinalv2.ui.main
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
@@ -96,6 +94,16 @@ class DetailsActivity : AppCompatActivity() {
                         .placeholder(R.drawable.placeholder)
                         .into(imageView);
                     binding.photoLayout.addView(imageView);
+                }else if(media.type == 2.toLong() && media.noteId == note!!.id){
+                    val videoView = VideoView(this)
+                    videoView.layoutParams = LinearLayout.LayoutParams(800, 800)
+                    videoView.setVideoPath(media.path)
+                    videoView.start()
+                    val mediacontrolleralone = MediaController(this)
+                    mediacontrolleralone.setAnchorView(videoView)
+                    videoView.setMediaController(mediacontrolleralone)
+                    binding.videosLayout.addView(videoView);
+
                 }
             }
         }
