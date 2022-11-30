@@ -67,18 +67,11 @@
                     android:textSize="16sp"
                     tools:text="Descripción de tarea" />
 
-                <androidx.core.widget.NestedScrollView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="horizontal">
-
                     <LinearLayout
                         android:id="@+id/photoLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
-                </androidx.core.widget.NestedScrollView>
-
 
                 <LinearLayout
                     android:layout_width="match_parent"

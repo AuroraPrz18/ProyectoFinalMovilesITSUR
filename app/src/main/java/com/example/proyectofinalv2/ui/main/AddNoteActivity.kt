@@ -1,5 +1,6 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -7,6 +8,7 @@ import android.provider.MediaStore
 import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -49,6 +51,7 @@ class AddNoteActivity : AppCompatActivity() {
         binding.cancelar.setOnClickListener{finish()}
         binding.crear.setOnClickListener{createNote()}
         binding.fotoBtn.setOnClickListener{addPhoto()}
+        binding.reminderBtn.setOnClickListener{addReminder()}
         binding.isTaskSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if(b){
                 binding.dueDateWrapper.visibility = View.VISIBLE
@@ -65,6 +68,35 @@ class AddNoteActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun addReminder() {
+        val getDate = Calendar.getInstance()
+        val datepicker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
+            DatePickerDialog.OnDateSetListener{ datePicker, i, i2, i3 ->
+                val selectDate: Calendar = Calendar.getInstance()
+                selectDate.set(Calendar.YEAR, i)
+                selectDate.set(Calendar.MONTH, i2)
+                selectDate.set(Calendar.DAY_OF_MONTH, i3)
+                var strI2 =  (i2+1).toString()
+                if(strI2.length==1)strI2 = "0"+(i2+1).toString()
+                var strI3 =  i3.toString()
+                if(strI3.length==1)strI3 = "0"+i3.toString()
+                val strDate = (i.toString()+"-"+strI2+"-"+strI3)
+                addReminderText(strDate)
+            },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
+        datepicker.show()
+    }
+
+    private fun addReminderText(strDate: String) {
+        val textView = TextView(this)
+        textView.setText(strDate)
+        binding.remindersLayout.addView(textView);
+    }
+
+    fun localDateToDate(localDate: LocalDate): Date? {
+        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
+    }
+
     @Throws(IOException::class)
     fun createFile(): File {
         val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -155,7 +187,4 @@ class AddNoteActivity : AppCompatActivity() {
 
 
 
-    fun localDateToDate(localDate: LocalDate): Date? {
-        return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
-    }
 }
