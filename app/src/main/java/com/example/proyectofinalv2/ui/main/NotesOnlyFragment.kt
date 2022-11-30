@@ -58,6 +58,7 @@ class NotesOnlyFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickL
 
     override fun onShowClickListener(note: Note) {
         val intent = Intent(activity, DetailsActivity::class.java)
+        intent.putExtra("media", mediasList)
         intent.putExtra("note", note)
         startActivity(intent)
     }

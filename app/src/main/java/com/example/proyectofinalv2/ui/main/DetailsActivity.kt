@@ -53,8 +53,11 @@ class DetailsActivity : AppCompatActivity() {
                 binding.dueDateTextView.visibility = View.GONE
                 binding.dueDateTextView1.visibility = View.GONE
             }
-            mediasList = intent.getSerializableExtra("media") as ArrayList<Multimedia>;
-            getMedia()
+            if(intent.hasExtra("media")){
+                mediasList = intent.getSerializableExtra("media") as ArrayList<Multimedia>;
+                getMedia()
+            }
+
         }
     }
 
