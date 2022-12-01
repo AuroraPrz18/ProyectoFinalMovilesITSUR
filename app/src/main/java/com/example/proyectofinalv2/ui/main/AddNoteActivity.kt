@@ -322,19 +322,20 @@ class AddNoteActivity : AppCompatActivity() {
     fun setUpAlarm() {
         for(reminder in remindersList){
             if(reminder.isSetUp == false){
-                // TODO: Traer info de nota
                 val intent = Intent(applicationContext, AlarmReceiver::class.java)
                 var titleD = getString(R.string.notificationTitleForTask)
                 var descD = getString(R.string.notificationDescForTask)
                 for(note in notesList){
                     if(note.id == reminder.noteId){
                         titleD = note.title!!
+                        intent.putExtra("note", note)
                     }
                 }
-                intent.putExtra("title", titleD)
-                intent.putExtra("desc", descD)
-                intent.putExtra("notiId", reminder.id.toInt())
-                intent.putExtra("noteId", reminder.noteId)
+                intent.apply {
+                    putExtra("title", titleD)
+                    putExtra("desc", descD)
+                    putExtra("notiId", reminder.id.toInt())
+                }
 
                 var pendingIntent = PendingIntent.getBroadcast(
                     applicationContext,

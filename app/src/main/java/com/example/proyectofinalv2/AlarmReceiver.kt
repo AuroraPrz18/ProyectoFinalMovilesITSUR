@@ -14,6 +14,7 @@ import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.data.NoteDB
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
+import com.example.proyectofinalv2.ui.main.DetailsActivity
 import java.time.LocalDate
 import java.util.*
 import kotlin.math.log
@@ -38,11 +39,21 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     private fun mostrarNotificacion(context: Context?, intent: Intent?) {
-        var noteId: Long = intent?.getLongExtra("noteId", -1)!!
+        val note: Note = intent?.getSerializableExtra("note") as Note
+        val intentTap = Intent(context, DetailsActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("note", note)
+        }
+        val notifyPendingIntent = PendingIntent.getActivity(
+            context, 0, intentTap,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        )
+
         val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
             .setContentTitle(intent?.getStringExtra(title))
             .setContentText(intent?.getStringExtra(desc))
+            .setContentIntent(notifyPendingIntent)
             //.setAutoCancel(true)
             //.setDefaults(NotificationCompat.DEFAULT_ALL)
             //.setPriority(NotificationCompat.PRIORITY_HIGH)
