@@ -42,6 +42,7 @@ import java.time.ZoneId
 import java.util.*
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 class AddNoteActivity : AppCompatActivity() {
+    private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
     val media = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
@@ -99,6 +100,11 @@ class AddNoteActivity : AppCompatActivity() {
             }else{
                 binding.dueDateWrapper.visibility = View.GONE
             }
+        }
+
+        addNoteViewModel.allNotes().observe(this){
+                list ->
+            notesList = list as ArrayList<Note>
         }
 
         note = intent.getSerializableExtra("note") as Note?
@@ -318,8 +324,13 @@ class AddNoteActivity : AppCompatActivity() {
             if(reminder.isSetUp == false){
                 // TODO: Traer info de nota
                 val intent = Intent(applicationContext, AlarmReceiver::class.java)
-                var titleD = "Una tarea se acerca"
-                var descD = "Hemos notado que tienes una tarea pendiente..."
+                var titleD = getString(R.string.notificationTitleForTask)
+                var descD = getString(R.string.notificationDescForTask)
+                for(note in notesList){
+                    if(note.id == reminder.noteId){
+                        titleD = note.title!!
+                    }
+                }
                 intent.putExtra("title", titleD)
                 intent.putExtra("desc", descD)
                 intent.putExtra("notiId", reminder.id.toInt())

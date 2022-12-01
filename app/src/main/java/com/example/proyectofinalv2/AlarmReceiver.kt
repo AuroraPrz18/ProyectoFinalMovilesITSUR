@@ -12,28 +12,33 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.data.NoteDB
+import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import java.time.LocalDate
 import java.util.*
+import kotlin.math.log
 
 const val notiId = "id"
 const val title = "title"
 const val desc = "desc"
 
 class AlarmReceiver: BroadcastReceiver() {
+    var notes = ArrayList<Note>()
     override fun onReceive(context: Context?, intent: Intent?) {
         context?.let { createNotificationChannel(it, null) }
+
+        val bd = (context?.applicationContext  as NoteApp).database
+        val noteDao = (context?.applicationContext  as NoteApp ).database?.noteDao()
+        val notasData = noteDao?.getNotes()
+
+        notasData?.observeForever {
+            notes = it as ArrayList<Note>
+        }
         mostrarNotificacion(context, intent);
     }
 
     private fun mostrarNotificacion(context: Context?, intent: Intent?) {
-       /* val intent = Intent(context, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP //Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        intent.putExtra("id", IDS2++)
-        var pendingIntent = PendingIntent.getActivity(context, 0,
-                intent, PendingIntent.FLAG_MUTABLE)*/
-
-
+        var noteId: Long = intent?.getLongExtra("noteId", -1)!!
         val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
             .setContentTitle(intent?.getStringExtra(title))
