@@ -78,7 +78,7 @@ class NotesListAdapter (val onClickListeners: ViewHolder.CardViewClickListener) 
                     photosLayout.addView(imageView);
                 }else  if(media.type == 2.toLong() && media.noteId == note.id){
                     videoImage.visibility = View.VISIBLE
-                }else  if(media.type == 2.toLong() && media.noteId == note.id){
+                }else  if(media.type == 3.toLong() && media.noteId == note.id){
                     audioImage.visibility = View.VISIBLE
                 }
             }
