@@ -38,4 +38,5 @@
     <string name="channel_desc">Channel for alarm manager</string>
     <string name="notificationDescForTask">There is something waiting for you. Touch here to see what happen.</string>
     <string name="notificationTitleForTask">A task is waiting</string>
+    <string name="add_video">Add video</string>
 </resources>

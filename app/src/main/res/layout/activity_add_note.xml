@@ -139,7 +139,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
-                    android:contentDescription="Add video"
+                    android:contentDescription="@string/add_video"
                     android:src="@drawable/ic_baseline_video_call_24"
                     android:tint="#e28743"
                     app:layout_anchor="@id/bottomAppBar"
