@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.material.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.bumptech.glide.Glide
@@ -41,6 +42,7 @@ import java.time.ZoneId
 import java.util.*
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 class AddNoteActivity : AppCompatActivity() {
+    private var remindersList = ArrayList<Reminder>()
     val media = mutableListOf<Multimedia>();
     val reminders = mutableListOf<Reminder>();
     val calendars = mutableListOf<Calendar>();
@@ -194,36 +196,14 @@ class AddNoteActivity : AppCompatActivity() {
             strDate += "T"+strI2+":"+strI3+":00"//"2007-12-03T10:15:30"
             addReminderText(strDate)
             calendars.add(calendar)
-            reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate))))
-        }
-    }
-    private fun setUpAlarm() {
-        for(calendarA in calendars){
-            val intent = Intent(applicationContext, AlarmReceiver::class.java)
-            var titleD = "rrr"
-            var descD = "ddd"
-            intent.putExtra("title", titleD)
-            intent.putExtra("desc", descD)
-
-            var pendingIntent = PendingIntent.getBroadcast(
-                applicationContext,
-                notiId,
-                intent,
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-            )
-            alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmMgr.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                calendarA.timeInMillis,
-                pendingIntent
-            )
+            reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate)), isSetUp = false))
         }
     }
 
     private fun addReminderText(strDate: String) {
         val textView = TextView(this)
         textView.setText(strDate)
-        binding.remindersLayout.addView(textView);
+        binding.remindersLayout.addView(textView)
     }
 
     fun localDateToDate(localDate: LocalDateTime): Date? {
@@ -311,11 +291,16 @@ class AddNoteActivity : AppCompatActivity() {
             dueDate = localDateToDate(dueDateAux)!!
         }else dueDate = null
 
+        addNoteViewModel.allReminders().observe(this){
+                list ->
+            remindersList = list as ArrayList<Reminder>
+            setUpAlarm()
+        }
+
         if(note==null){
             val newNote = Note(title = title, description = description, isTask = isATask,
                 dateCreation = localDateToDate(LocalDateTime.now()), dueDate = dueDate, isComplete = false, dateCompleted = null)
             addNoteViewModel.insertNewNote(newNote, media, reminders)
-            setUpAlarm()
         }else{
             var updatedNote = note!!
             updatedNote.title = title
@@ -326,6 +311,38 @@ class AddNoteActivity : AppCompatActivity() {
 
         }
         finish()
+    }
+
+    fun setUpAlarm() {
+        for(reminder in remindersList){
+            if(reminder.isSetUp == false){
+                // TODO: Traer info de nota
+                val intent = Intent(applicationContext, AlarmReceiver::class.java)
+                var titleD = "Una tarea se acerca"
+                var descD = "Hemos notado que tienes una tarea pendiente..."
+                intent.putExtra("title", titleD)
+                intent.putExtra("desc", descD)
+                intent.putExtra("notiId", reminder.id.toInt())
+                intent.putExtra("noteId", reminder.noteId)
+
+                var pendingIntent = PendingIntent.getBroadcast(
+                    applicationContext,
+                    reminder.id.toInt(),
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                var calendarA = Calendar.getInstance()
+                calendarA.time =reminder.date
+                alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+                alarmMgr.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendarA.timeInMillis,
+                    pendingIntent
+                )
+                reminder.isSetUp = true
+                addNoteViewModel.updateReminder(reminder)
+            }
+        }
     }
 
     // Audiooo

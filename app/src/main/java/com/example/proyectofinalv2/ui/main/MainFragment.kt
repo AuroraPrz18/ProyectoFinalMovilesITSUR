@@ -1,6 +1,9 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.app.AlarmManager
 import android.app.DatePickerDialog
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
@@ -96,6 +99,7 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
         return xlarge || large
     }
 
+
     override fun onShowClickListener(note: Note) {
         val intent = Intent(activity, DetailsActivity::class.java)
         intent.putExtra("media", mediasList)
@@ -146,8 +150,6 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     fun localDateToDate(localDate: LocalDate): Date? {
         return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())
     }
-
-
 
 
 }

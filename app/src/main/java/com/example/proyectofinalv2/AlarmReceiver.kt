@@ -16,7 +16,7 @@ import com.example.proyectofinalv2.domain.model.Note
 import java.time.LocalDate
 import java.util.*
 
-const val notiId = 1
+const val notiId = "id"
 const val title = "title"
 const val desc = "desc"
 
@@ -43,7 +43,8 @@ class AlarmReceiver: BroadcastReceiver() {
             //.setPriority(NotificationCompat.PRIORITY_HIGH)
             //.setContentIntent(pendingIntent)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(notiId, builder.build())
+        var id: Int = intent?.getIntExtra("notiId", 0)!!
+        notificationManager.notify(id, builder.build())
     }
 
     companion object {

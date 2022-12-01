@@ -26,6 +26,13 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
     val notesLiveData = MutableLiveData<List<Note>>()
 
     fun allReminders(): LiveData<List<Reminder>> = repositoryRemi.allReminders()
+    fun updateReminder(reminder: Reminder) = viewModelScope.launch(Dispatchers.IO){
+        repositoryRemi.updateReminder(reminder)
+    }
+    fun deleteReminder(reminder: Reminder) = viewModelScope.launch(Dispatchers.IO){
+        repositoryRemi.deleteReminder(reminder)
+    }
+
     fun allMedia(): LiveData<List<Multimedia>> = repositoryMult.allMedias()
     fun allNotes(): LiveData<List<Note>> = repository.allNotes()
     fun onlyTasks(): LiveData<List<Note>> = repository.onlyTasks()
