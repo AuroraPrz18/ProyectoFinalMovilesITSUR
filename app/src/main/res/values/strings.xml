@@ -39,4 +39,6 @@
     <string name="notificationDescForTask">There is something waiting for you. Touch here to see what happen.</string>
     <string name="notificationTitleForTask">A task is waiting</string>
     <string name="add_video">Add video</string>
+    <string name="edit_media">Edit media</string>
+    <string name="delete_media">Delete media</string>
 </resources>

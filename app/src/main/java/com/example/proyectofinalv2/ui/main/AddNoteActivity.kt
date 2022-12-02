@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -24,9 +25,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyectofinalv2.*
+import com.example.proyectofinalv2.adapters.MediaListAdapter
 import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
@@ -42,7 +47,7 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 private const val REQUEST_CODE =200
-class AddNoteActivity : AppCompatActivity() {
+class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
     private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
@@ -73,6 +78,9 @@ class AddNoteActivity : AppCompatActivity() {
     private lateinit var calendar: Calendar
     private lateinit var alarmMgr: AlarmManager
     private var strDate = ""
+    //Recyvlerview
+    private lateinit var adapterM: MediaListAdapter
+    private var mediasList = ArrayList<Multimedia>()
 
     private lateinit var binding: ActivityAddNoteBinding
     private var note: Note? = null;
@@ -103,9 +111,21 @@ class AddNoteActivity : AppCompatActivity() {
             }
         }
 
+        getMedia()
         addNoteViewModel.allNotes().observe(this){
                 list ->
             notesList = list as ArrayList<Note>
+        }
+        addNoteViewModel.allMedia().observe(this){
+                list ->
+            mediasList.clear()
+            for(media in list){
+                if(media.noteId == note!!.id){
+                    mediasList.add(media);
+                }
+            }
+            adapterM.setData(mediasList)
+            adapterM.notifyDataSetChanged()
         }
 
         note = intent.getSerializableExtra("note") as Note?
@@ -148,6 +168,21 @@ class AddNoteActivity : AppCompatActivity() {
                     startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
                 }
             }
+        }
+    }
+    private fun getMedia() {
+        val recyclerView = binding.mediaRV
+        adapterM = MediaListAdapter(this@AddNoteActivity)
+        var layoutManagerRV: RecyclerView.LayoutManager
+        if(isTablet() == true){
+            layoutManagerRV = GridLayoutManager(this, 3)
+        }else{
+            layoutManagerRV =
+                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        }
+        recyclerView?.apply {
+            layoutManager = layoutManagerRV
+            adapter = adapterM
         }
     }
 
@@ -465,6 +500,23 @@ class AddNoteActivity : AppCompatActivity() {
         ).apply {
             audioFileName = absolutePath
         }
+    }
+
+    // Recycler view
+    fun isTablet(): Boolean {
+        val xlarge = getResources()
+            .getConfiguration().screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === 4
+        val large = getResources()
+            .getConfiguration().screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
+        return xlarge || large
+    }
+
+    override fun onDeleteClickListener(media: Multimedia) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onEditClickListener(media: Multimedia) {
+        TODO("Not yet implemented")
     }
 }
 
