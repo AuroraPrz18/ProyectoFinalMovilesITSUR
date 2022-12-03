@@ -46,11 +46,14 @@ import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
+import kotlin.collections.ArrayList
+
 private const val REQUEST_CODE =200
 class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
     private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
+    private var mediasList = ArrayList<Multimedia>() // En recyclerView
     // Arrays auxiliares
     private val media = mutableListOf<Multimedia>();
     private val reminders = mutableListOf<Reminder>();
@@ -80,7 +83,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     private var strDate = ""
     //Recyvlerview
     private lateinit var adapterM: MediaListAdapter
-    private var mediasList = ArrayList<Multimedia>()
+
 
     private lateinit var binding: ActivityAddNoteBinding
     private var note: Note? = null;
@@ -119,10 +122,15 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         addNoteViewModel.allMedia().observe(this){
                 list ->
             mediasList.clear()
-            for(media in list){
-                if(media.noteId == note!!.id){
-                    mediasList.add(media);
+            // Add those in the DB
+            for(mediaV in list){
+                if(note!=null && mediaV.noteId == note!!.id){
+                    mediasList.add(mediaV);
                 }
+            }
+            // Add those news
+            for(mediaV in media){
+                mediasList.add(mediaV);
             }
             adapterM.setData(mediasList)
             adapterM.notifyDataSetChanged()
@@ -172,6 +180,9 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
     private fun getMedia() {
         val recyclerView = binding.mediaRV
+        for(mediaV in mediasList){
+            media.add(mediaV)
+        }
         adapterM = MediaListAdapter(this@AddNoteActivity)
         var layoutManagerRV: RecyclerView.LayoutManager
         if(isTablet() == true){
@@ -511,11 +522,20 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         return xlarge || large
     }
 
-    override fun onDeleteClickListener(media: Multimedia) {
-        TODO("Not yet implemented")
+    override fun onDeleteClickListener(mediaV: Multimedia) {
+        adapterM.setData(mediasList)
+        adapterM.notifyDataSetChanged()
+        if(mediaV.noteId!=-1.toLong()){
+            addNoteViewModel.deleteMultimedia(mediaV)
+        }else{
+            media.remove(mediaV)
+        }
+        mediasList.remove(mediaV)
+        adapterM.setData(mediasList)
+        adapterM.notifyDataSetChanged()
     }
 
-    override fun onEditClickListener(media: Multimedia) {
+    override fun onEditClickListener(mediaV: Multimedia) {
         TODO("Not yet implemented")
     }
 }

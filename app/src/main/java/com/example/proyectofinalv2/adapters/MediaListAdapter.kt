@@ -1,5 +1,6 @@
 package com.example.proyectofinalv2.adapters
 
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,39 +20,13 @@ class MediaListAdapter (val onClickListeners: MediaListAdapter.ViewHolder.CardVi
         val mediaLayout: LinearLayout
         val audioLayout: LinearLayout
         val nameAudio: TextView
-        val menu: ImageView
+        val deleteBtn: ImageView
         init{
             mediaLayout = view.findViewById(R.id.mediaLayout)
             audioLayout = view.findViewById(R.id.audioLayout)
             nameAudio = view.findViewById(R.id.nameAudioTxt)
-            menu = view.findViewById(R.id.menu)
-            menu.setOnClickListener{popupMenu(it)}
-            nameAudio.setText("holk")
+            deleteBtn = view.findViewById(R.id.deleteBtn)
         }
-        private fun popupMenu(view: View?) {
-            val popupMenu = PopupMenu(view?.context, view)
-            popupMenu.inflate(R.menu.show_menu)
-            popupMenu.setOnMenuItemClickListener {
-                when(it.itemId){
-                    R.id.edit->{
-                        Toast.makeText(view?.context, "Edit button", Toast.LENGTH_LONG).show()
-                        true
-                    }
-                    R.id.delete->{
-                        Toast.makeText(view?.context, "Delete button", Toast.LENGTH_LONG).show()
-                        true
-                    }
-                    else-> true
-                }
-            }
-            popupMenu.show()
-            val popup = PopupMenu::class.java.getDeclaredField("mPopup")
-            popup.isAccessible = true
-            val menu = popup.get(popupMenu)
-            menu.javaClass.getDeclaredMethod("setForceShowIcon", Boolean::class.java)
-                .invoke(menu, true)
-        }
-
         interface CardViewClickListener{
             fun onDeleteClickListener(media: Multimedia)
             fun onEditClickListener(media: Multimedia)
@@ -95,6 +70,9 @@ class MediaListAdapter (val onClickListeners: MediaListAdapter.ViewHolder.CardVi
             }else if(media.type == 3.toLong()){ // Audio
                 audioLayout.visibility = View.VISIBLE
                 nameAudio.setText(media.path)
+            }
+            deleteBtn.setOnClickListener {
+                onClickListeners.onDeleteClickListener(media)
             }
         }
     }

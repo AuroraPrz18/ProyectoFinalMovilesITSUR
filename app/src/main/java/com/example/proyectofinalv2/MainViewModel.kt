@@ -32,6 +32,9 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
     fun deleteReminder(reminder: Reminder) = viewModelScope.launch(Dispatchers.IO){
         repositoryRemi.deleteReminder(reminder)
     }
+    fun deleteMultimedia(media: Multimedia) = viewModelScope.launch(Dispatchers.IO){
+        repositoryMult.deleteMultimedia(media)
+    }
 
     fun allMedia(): LiveData<List<Multimedia>> = repositoryMult.allMedias()
     fun allNotes(): LiveData<List<Note>> = repository.allNotes()
