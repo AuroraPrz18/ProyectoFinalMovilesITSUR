@@ -54,6 +54,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
     private var mediasList = ArrayList<Multimedia>() // En recyclerView
+    private var deleteMediaList = ArrayList<Multimedia>()
     // Arrays auxiliares
     private val media = mutableListOf<Multimedia>();
     private val reminders = mutableListOf<Reminder>();
@@ -353,7 +354,8 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             updatedNote.isTask = isATask
             updatedNote.dueDate = dueDate
             addNoteViewModel.updateNote(updatedNote)
-
+            //addNoteViewModel.insertNewNote(updatedNote, media, reminders)
+            deleteMedia()
         }
         finish()
     }
@@ -521,15 +523,16 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             .getConfiguration().screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK === Configuration.SCREENLAYOUT_SIZE_LARGE
         return xlarge || large
     }
+    fun deleteMedia(){
+        for(mediaV in deleteMediaList){
+            addNoteViewModel.deleteMultimedia(mediaV)
+        }
+    }
 
     override fun onDeleteClickListener(mediaV: Multimedia) {
-        adapterM.setData(mediasList)
-        adapterM.notifyDataSetChanged()
-        if(mediaV.noteId!=-1.toLong()){
-            addNoteViewModel.deleteMultimedia(mediaV)
-        }else{
+        if(mediaV.noteId==-1.toLong()){
             media.remove(mediaV)
-        }
+        }else deleteMediaList.add(mediaV)
         mediasList.remove(mediaV)
         adapterM.setData(mediasList)
         adapterM.notifyDataSetChanged()
