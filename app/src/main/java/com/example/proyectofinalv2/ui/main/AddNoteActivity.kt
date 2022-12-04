@@ -353,8 +353,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             updatedNote.description = description
             updatedNote.isTask = isATask
             updatedNote.dueDate = dueDate
-            addNoteViewModel.updateNote(updatedNote)
-            //addNoteViewModel.insertNewNote(updatedNote, media, reminders)
+            addNoteViewModel.updateNote(updatedNote, media, reminders)
             deleteMedia()
         }
         finish()

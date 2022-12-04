@@ -46,6 +46,16 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
     }
     fun insertNewNote(note: Note, multimedias: List<Multimedia>, reminders: List<Reminder>)= viewModelScope.launch(Dispatchers.IO){
         val noteId = repository.insertNote(note)
+        addMediaAndRemindersForNote(note.id, multimedias, reminders)
+    }
+    fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
+        repository.updateNote(note)
+    }
+    fun updateNote(note: Note, multimedias: List<Multimedia>, reminders: List<Reminder>) = viewModelScope.launch(Dispatchers.IO){
+        repository.updateNote(note)
+        addMediaAndRemindersForNote(note.id, multimedias, reminders)
+    }
+    fun addMediaAndRemindersForNote(noteId: Long, multimedias: List<Multimedia>, reminders: List<Reminder>)= viewModelScope.launch(Dispatchers.IO){
         for (multimedia in multimedias) {
             multimedia.noteId=noteId
             repositoryMult.insertMultimedia(multimedia)
@@ -54,9 +64,6 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
             reminder.noteId=noteId
             repositoryRemi.insertReminder(reminder)
         }
-    }
-    fun updateNote(note: Note) = viewModelScope.launch(Dispatchers.IO){
-        repository.updateNote(note)
     }
 
 
