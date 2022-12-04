@@ -84,6 +84,8 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     private var strDate = ""
     //Recyvlerview
     private lateinit var adapterM: MediaListAdapter
+    var dueDate: Date? = null
+
 
 
     private lateinit var binding: ActivityAddNoteBinding
@@ -100,18 +102,19 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         setContentView(binding.root)
 
 
-        binding.dueDateWrapper.visibility = View.GONE
+        binding.dueDate.visibility = View.GONE
         binding.cancelar.setOnClickListener{finish()}
         binding.crear.setOnClickListener{createNote()}
         binding.fotoBtn.setOnClickListener{addPhoto()}
         binding.videoBtn.setOnClickListener{addVideo()}
         binding.audioBtn.setOnClickListener{addAudio()}
-        binding.reminderBtn.setOnClickListener{addReminder()}
+        binding.dueDate.setOnClickListener{addReminder(true)}
+        binding.reminderBtn.setOnClickListener{addReminder(false)}
         binding.isTaskSwitch.setOnCheckedChangeListener { compoundButton, b ->
             if(b){
-                binding.dueDateWrapper.visibility = View.VISIBLE
+                binding.dueDate.visibility = View.VISIBLE
             }else{
-                binding.dueDateWrapper.visibility = View.GONE
+                binding.dueDate.visibility = View.GONE
             }
         }
 
@@ -199,7 +202,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
 
 
-    private fun addReminder() {
+    private fun addReminder(isDueDate: Boolean) {
         val getDate = Calendar.getInstance()
         val datepicker = DatePickerDialog(this, android.R.style.Theme_Holo_Light_Dialog_MinWidth,
             DatePickerDialog.OnDateSetListener{ datePicker, i, i2, i3 ->
@@ -217,13 +220,13 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                 calendar[Calendar.MONTH] = i2
                 calendar[Calendar.DAY_OF_MONTH] = i3
                 strDate = strDateAux
-                showTimePicker()
+                showTimePicker(isDueDate)
             },getDate.get(Calendar.YEAR), getDate.get(Calendar.MONTH), getDate.get(Calendar.DAY_OF_MONTH))
         datepicker.show()
 
     }
 
-    private fun showTimePicker() {
+    private fun showTimePicker(isDueDate: Boolean) {
         picker = MaterialTimePicker.Builder()
             .setTimeFormat(TimeFormat.CLOCK_24H)
             .setHour(12)
@@ -240,15 +243,20 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             var strI3 =  picker.minute.toString()
             if(strI3.length==1)strI3 = "0"+picker.minute.toString()
             strDate += "T"+strI2+":"+strI3+":00"//"2007-12-03T10:15:30"
-            addReminderText(strDate)
+            addReminderText(strDate, isDueDate)
             calendars.add(calendar)
-            reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate)), isSetUp = false))
+            if(isDueDate){
+                dueDate = localDateToDate(LocalDateTime.parse(strDate))
+            }
+            reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate)), isSetUp = false, isDueDate = isDueDate))
         }
     }
 
-    private fun addReminderText(strDate: String) {
+    private fun addReminderText(strDate: String, isDueDate: Boolean) {
         val textView = TextView(this)
-        textView.setText(strDate)
+        if(isDueDate==true){
+            textView.setText("DUE DATE: $strDate")
+        }else textView.setText(strDate)
         binding.remindersLayout.addView(textView)
     }
 
@@ -327,15 +335,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         val title = binding.titleEditView.text.toString()
         val description = binding.descriptionEditView.text.toString()
         val isATask = binding.isTaskSwitch.isChecked
-        var dueDate: Date?
-        if (isATask){
-            val dueDateStr = binding.dueDate.text.toString()
-            val dueDateStrAux = dueDateStr.substring(6)+"-"+dueDateStr.substring(0, 2)+"-"+dueDateStr.substring(3, 5)+
-                    "T08:00:00"
-            val dueDateAux = LocalDateTime.parse(dueDateStrAux)
-            Toast.makeText(this,dueDateStrAux, Toast.LENGTH_LONG)
-            dueDate = localDateToDate(dueDateAux)!!
-        }else dueDate = null
+        if (!isATask) dueDate = null
 
         addNoteViewModel.allReminders().observe(this){
                 list ->
@@ -368,6 +368,9 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                 for(note in notesList){
                     if(note.id == reminder.noteId){
                         titleD = note.title!!
+                        if(reminder.isDueDate==true){
+                            titleD = getString(R.string.notificationTitleForDueDate)
+                        }
                         intent.putExtra("note", note)
                     }
                 }

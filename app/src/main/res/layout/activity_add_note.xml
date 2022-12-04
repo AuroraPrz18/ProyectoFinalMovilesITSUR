@@ -89,23 +89,19 @@
                 android:text="@string/is_a_task"
                 android:textSize="@dimen/text_field"/>
 
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/dueDateWrapper"
-                android:layout_width="match_parent"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/dueDate"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="@string/dueDatePicker"
-                android:padding="8dp"
-                app:startIconDrawable="@drawable/ic_baseline_date_range_24"
-                app:boxBackgroundColor="@color/text_field_color"
-                >
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/dueDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    />
+                android:layout_weight="1"
+                android:text="Set up due date"
+                android:textColor="@color/black"
+                android:backgroundTint="@color/second_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

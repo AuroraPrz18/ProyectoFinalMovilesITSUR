@@ -10,5 +10,6 @@ data class Reminder(
     @PrimaryKey(autoGenerate = true) @ColumnInfo(name = "id") val id: Long = 0,
     @ColumnInfo(name = "noteId") var noteId: Long,
     @ColumnInfo(name = "date") val date: Date?,
-    @ColumnInfo(name = "isSetUp") var isSetUp: Boolean?
+    @ColumnInfo(name = "isSetUp") var isSetUp: Boolean?,
+    @ColumnInfo(name = "isDueDate") var isDueDate: Boolean?
 ) : java.io.Serializable
