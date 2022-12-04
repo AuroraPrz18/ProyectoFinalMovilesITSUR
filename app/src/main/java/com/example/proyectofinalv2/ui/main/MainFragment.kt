@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -32,6 +33,7 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     private val viewModel: MainViewModel by activityViewModels()
     private lateinit var adapterV: NotesListAdapter
     private var mediasList = ArrayList<Multimedia>()
+    private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -66,30 +68,40 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
         }
         viewModel.allNotes().observe(viewLifecycleOwner){
             list ->
-            adapterV.setData(list as ArrayList<Note>, mediasList, remindersList)
+            notesList = list as ArrayList<Note>
+            adapterV.setData(notesList, mediasList, remindersList)
             adapterV.notifyDataSetChanged()
         }
 
-        /*binding.mainSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            android.widget.SearchView.OnQueryTextListener {
+        binding.mainSearchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
+                if(query!=null && query!!.length>0){
+                    var list = ArrayList<Note>()
+                    for(note in notesList){
+                        if(note.title!=null && note.title!!.contains(query)){
+                            list.add(note)
+                        }else if(note.description!=null && note.description!!.contains(query)){
+                            list.add(note)
+                        }
+                    }
+                    adapterV.setData(list, mediasList, remindersList)
+                    adapterV.notifyDataSetChanged()
+                }else{
+                    adapterV.setData(notesList, mediasList, remindersList)
+                    adapterV.notifyDataSetChanged()
+                }
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(newText!=null && newText!!.length>0){
-                    val list = viewModel.search(newText)
-                    adapterV.setData(list as ArrayList<Note>)
-                    adapterV.notifyDataSetChanged()
                 }else{
-                    val list = viewModel.allNotes()
-                    adapterV.setData(list as ArrayList<Note>)
+                    adapterV.setData(notesList, mediasList, remindersList)
                     adapterV.notifyDataSetChanged()
                 }
                 return false
             }
-            })*/
-
+            })
     }
     fun isTablet(): Boolean {
         val xlarge = getResources()

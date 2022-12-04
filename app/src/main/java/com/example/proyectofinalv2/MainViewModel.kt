@@ -40,7 +40,6 @@ class MainViewModel(private val noteDao: NoteDao, private val mediaDao: MediaDAO
     fun allNotes(): LiveData<List<Note>> = repository.allNotes()
     fun onlyTasks(): LiveData<List<Note>> = repository.onlyTasks()
     fun onlyNotes(): LiveData<List<Note>> = repository.onlyNotes()
-    //fun search(searchStr: String): List<Note> =  repository.search(searchStr)
     fun deleteNote(note: Note)= viewModelScope.launch(Dispatchers.IO){
         repository.deleteNote(note)
     }
