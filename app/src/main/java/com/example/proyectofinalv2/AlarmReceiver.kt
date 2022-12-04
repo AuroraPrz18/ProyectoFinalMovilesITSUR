@@ -54,10 +54,6 @@ class AlarmReceiver: BroadcastReceiver() {
             .setContentTitle(intent?.getStringExtra(title))
             .setContentText(intent?.getStringExtra(desc))
             .setContentIntent(notifyPendingIntent)
-            //.setAutoCancel(true)
-            //.setDefaults(NotificationCompat.DEFAULT_ALL)
-            //.setPriority(NotificationCompat.PRIORITY_HIGH)
-            //.setContentIntent(pendingIntent)
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         var id: Int = intent?.getIntExtra("notiId", 0)!!
         notificationManager.notify(id, builder.build())

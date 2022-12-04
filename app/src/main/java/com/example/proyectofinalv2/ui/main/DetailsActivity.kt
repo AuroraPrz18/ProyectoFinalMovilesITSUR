@@ -1,6 +1,10 @@
 package com.example.proyectofinalv2.ui.main
 
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.media.MediaRecorder
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
@@ -16,6 +20,7 @@ import com.example.proyectofinalv2.databinding.ActivityDetailsBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
 import com.example.proyectofinalv2.domain.model.Note
 import com.example.proyectofinalv2.domain.model.Reminder
+import java.io.IOException
 import java.util.ArrayList
 
 class DetailsActivity : AppCompatActivity() {
@@ -23,6 +28,12 @@ class DetailsActivity : AppCompatActivity() {
     private var mediasList = ArrayList<Multimedia>()
     private var remindersList = ArrayList<Reminder>()
     private lateinit var binding: ActivityDetailsBinding
+    // Audio
+    private lateinit var recorder: MediaRecorder
+    private var player: MediaPlayer? = null
+    private var isRecording = false
+    private var isPlaying = false
+
     private val viewModel: MainViewModel by  viewModels {
         MainViewModelFactory((application as NoteApp).database!!.noteDao(),
             (application as NoteApp).database!!.mediaDao(), (application as NoteApp).database!!.reminderDao())
@@ -104,7 +115,42 @@ class DetailsActivity : AppCompatActivity() {
                     videoView.setMediaController(mediacontrolleralone)
                     binding.videosLayout.addView(videoView);
 
+                }else  if(media.type == 3.toLong() && media.noteId == note!!.id){
+                    val button = ImageView(this)
+                    button.layoutParams = LinearLayout.LayoutParams(200, 200)
+                    button.setImageResource(R.drawable.ic_play)
+                    button.setOnClickListener {
+                        if(!isPlaying) button.setImageResource(R.drawable.ic_playing)
+                        else button.setImageResource(R.drawable.ic_play)
+                        onPlay(media.path, isPlaying)
+                        isPlaying = !isPlaying
+                    }
+                    binding.audiosLayout.addView(button);
                 }
+            }
+        }
+    }
+
+    private fun onPlay(path: String, start: Boolean) = if (start) {
+        stopPlaying()
+    } else {
+        startPlaying(path)
+    }
+
+    private fun stopPlaying() {
+        player?.release()
+        player = null
+    }
+
+    private fun startPlaying(path: String) {
+        player = MediaPlayer().apply {
+            try {
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                setDataSource(path)
+                prepare()
+                start()
+            } catch (e: IOException) {
+                Log.e("Audio error", "prepare() failed")
             }
         }
     }
