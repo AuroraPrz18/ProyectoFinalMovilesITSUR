@@ -53,6 +53,7 @@ import kotlin.collections.ArrayList
 
 private const val REQUEST_CODE =200
 private const val IMAGE_REQUEST_CODE_FROM_FILE = 11
+private const val VIDEO_REQUEST_CODE_FROM_FILE = 22
 class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener,
     RemindersListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
@@ -227,6 +228,24 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
 
     private fun addVideo() {
+        val alertDialog: AlertDialog? = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(R.string.camera,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addVideoCamera()
+                    })
+                setNegativeButton(R.string.files,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addVideoFiles()
+                    })
+            }
+            builder.create()
+        }
+        alertDialog?.show()
+    }
+
+    private fun addVideoCamera(){
         Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
             takeVideoIntent.resolveActivity(packageManager)?.also {
                 val videoFile: File? = try {
@@ -245,6 +264,12 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                 }
             }
         }
+    }
+
+    private fun addVideoFiles(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "video/*"
+        startActivityForResult(intent, VIDEO_REQUEST_CODE_FROM_FILE)
     }
 
 
@@ -376,6 +401,9 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         }else if(requestCode == IMAGE_REQUEST_CODE_FROM_FILE  && resultCode == RESULT_OK){
             media.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = data?.data.toString()));
             mediasList.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = data?.data.toString()));
+        }else if (requestCode == VIDEO_REQUEST_CODE_FROM_FILE && resultCode == RESULT_OK){
+            media.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = data?.data.toString()));
+            mediasList.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = data?.data.toString()));
         }
         adapterM.setData(mediasList)
         adapterM.notifyDataSetChanged()
