@@ -65,6 +65,14 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+       <!-- <service android:name="com.example.proyectofinalv2.RebootServiceClass"/>
+        <receiver android:name="com.example.proyectofinalv2.MyRebootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>-->
     </application>
 
 </manifest>

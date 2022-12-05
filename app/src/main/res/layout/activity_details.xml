@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.DetailsActivity">
+    tools:context=".ui.main.DetailsActivity"
+    android:padding="18dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/noteElementLayout"
@@ -45,7 +46,8 @@
                         android:textColor="@android:color/black"
                         android:textSize="22sp"
                         android:textStyle="bold"
-                        tools:text="Título de tarea" />
+                        tools:text="Título de tarea"
+                        android:textAlignment="center"/>
 
                     <ImageView
                         android:id="@+id/completeImageView"
@@ -62,7 +64,8 @@
                     android:id="@+id/descriptionTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="2dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
                     android:textColor="@color/menu_bar"
                     android:textSize="16sp"
                     tools:text="Descripción de tarea" />
@@ -71,18 +74,21 @@
                         android:id="@+id/photoLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:gravity="center"/>
 
                     <LinearLayout
                         android:id="@+id/videosLayout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"/>
+                        android:orientation="vertical"
+                        android:gravity="center"/>
                 <LinearLayout
                     android:id="@+id/audiosLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:orientation="vertical"
+                    android:gravity="center"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
