@@ -556,8 +556,32 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
     fun deleteReminders(){
         for(reminderV in deleteRemindersList){
+            val intent = Intent(applicationContext, AlarmReceiver::class.java)
+            var titleD = getString(R.string.notificationTitleForTask)
+            var descD = getString(R.string.notificationDescForTask)
+            for(note in notesList){
+                if(note.id == reminderV.noteId){
+                    titleD = note.title!!
+                    if(reminderV.isDueDate==true){
+                        titleD = getString(R.string.notificationTitleForDueDate)
+                    }
+                    intent.putExtra("note", note)
+                }
+            }
+            intent.apply {
+                putExtra("title", titleD)
+                putExtra("desc", descD)
+                putExtra("notiId", reminderV.id.toInt())
+            }
+            var pendingIntent = PendingIntent.getBroadcast(
+                applicationContext,
+                reminderV.id.toInt(),
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+            )
+            alarmMgr = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            alarmMgr.cancel(pendingIntent)
             addNoteViewModel.deleteReminder(reminderV)
-            // TODO: Eliminar alarma
         }
     }
 
