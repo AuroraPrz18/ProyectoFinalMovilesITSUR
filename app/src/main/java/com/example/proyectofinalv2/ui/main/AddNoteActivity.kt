@@ -507,21 +507,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     var isRecording = false
     var isPlaying = false
     private fun addAudio() {
-        val alertDialog: AlertDialog? = this.let {
-            val builder = AlertDialog.Builder(it)
-            builder.apply {
-                setPositiveButton(R.string.speaker,
-                    DialogInterface.OnClickListener { dialog, id ->
-                        addAudioSpeaker()
-                    })
-                setNegativeButton(R.string.files,
-                    DialogInterface.OnClickListener { dialog, id ->
-                        addAudioFiles()
-                    })
-            }
-            builder.create()
-        }
-        alertDialog?.show()
+        addAudioSpeaker()
     }
     private fun addAudioFiles(){
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
