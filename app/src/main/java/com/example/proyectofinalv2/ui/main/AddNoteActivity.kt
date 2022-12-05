@@ -54,6 +54,7 @@ import kotlin.collections.ArrayList
 private const val REQUEST_CODE =200
 private const val IMAGE_REQUEST_CODE_FROM_FILE = 11
 private const val VIDEO_REQUEST_CODE_FROM_FILE = 22
+private const val AUDIO_REQUEST_CODE_FROM_FILE = 33
 class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener,
     RemindersListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
@@ -404,6 +405,9 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         }else if (requestCode == VIDEO_REQUEST_CODE_FROM_FILE && resultCode == RESULT_OK){
             media.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = data?.data.toString()));
             mediasList.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = data?.data.toString()));
+        }else if (requestCode == AUDIO_REQUEST_CODE_FROM_FILE && resultCode == RESULT_OK){
+            media.add(Multimedia(noteId = -1, type = 3.toLong(), path = data?.data.toString()));
+            mediasList.add(Multimedia(noteId = -1, type = 3.toLong(), path = data?.data.toString()));
         }
         adapterM.setData(mediasList)
         adapterM.notifyDataSetChanged()
@@ -503,6 +507,30 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     var isRecording = false
     var isPlaying = false
     private fun addAudio() {
+        val alertDialog: AlertDialog? = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(R.string.speaker,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addAudioSpeaker()
+                    })
+                setNegativeButton(R.string.files,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addAudioFiles()
+                    })
+            }
+            builder.create()
+        }
+        alertDialog?.show()
+    }
+    private fun addAudioFiles(){
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        intent.type = "audio/*"
+        startActivityForResult(intent, AUDIO_REQUEST_CODE_FROM_FILE)
+    }
+
+    private fun addAudioSpeaker(){
         if(permissionGranted) {
             when {
                 isRecording -> stopRecording()
@@ -510,9 +538,8 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             }
         }else{
             Toast.makeText(this, "There are not enough permissions to use the audio recorder",
-            Toast.LENGTH_LONG).show()
+                Toast.LENGTH_LONG).show()
         }
-
     }
 
     private fun stopRecording() {
@@ -664,7 +691,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                 prepare()
                 start()
             } catch (e: IOException) {
-                Log.e("Audio error", "prepare() failed")
+                Log.e("Audio error", e.toString())
             }
         }
     }
