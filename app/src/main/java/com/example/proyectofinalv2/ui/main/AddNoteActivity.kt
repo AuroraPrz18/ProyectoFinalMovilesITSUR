@@ -2,9 +2,11 @@ package com.example.proyectofinalv2.ui.main
 
 import android.Manifest
 import android.app.AlarmManager
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.PendingIntent
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -50,6 +52,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val REQUEST_CODE =200
+private const val IMAGE_REQUEST_CODE_FROM_FILE = 11
 class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener,
     RemindersListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
@@ -316,6 +319,29 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
 
     private fun addPhoto() {
+        val alertDialog: AlertDialog? = this.let {
+            val builder = AlertDialog.Builder(it)
+            builder.apply {
+                setPositiveButton(R.string.camera,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addPhotoCamera()
+                    })
+                setNegativeButton(R.string.files,
+                    DialogInterface.OnClickListener { dialog, id ->
+                        addPhotoFiles()
+                    })
+            }
+            builder.create()
+        }
+        alertDialog?.show()
+    }
+    private fun addPhotoFiles(){
+        val intent = Intent(Intent.ACTION_PICK)
+        intent.type = "image/*"
+        startActivityForResult(intent, IMAGE_REQUEST_CODE_FROM_FILE)
+    }
+
+    private fun addPhotoCamera(){
         Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
             takePictureIntent.resolveActivity(packageManager)?.also {
                 // Crear archivo al que ira
@@ -333,22 +359,23 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                         it
                     )
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
                 }
-             }
+            }
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val imageView = ImageView(this)
-            imageView.layoutParams = LinearLayout.LayoutParams(400, 400)
             media.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
             mediasList.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
         }else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
             media.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = photoURI.toString()));
             mediasList.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = photoURI.toString()));
+        }else if(requestCode == IMAGE_REQUEST_CODE_FROM_FILE  && resultCode == RESULT_OK){
+            media.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = data?.data.toString()));
+            mediasList.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = data?.data.toString()));
         }
         adapterM.setData(mediasList)
         adapterM.notifyDataSetChanged()

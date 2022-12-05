@@ -42,4 +42,6 @@
     <string name="edit_media">Edit media</string>
     <string name="delete_media">Delete media</string>
     <string name="notificationTitleForDueDate">Due date has arrive</string>
+    <string name="camera">Camera</string>
+    <string name="files">Files</string>
 </resources>
