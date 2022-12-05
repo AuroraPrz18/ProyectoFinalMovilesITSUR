@@ -9,6 +9,8 @@ import android.view.View
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.allViews
+import androidx.core.view.children
 import androidx.fragment.app.activityViewModels
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -33,6 +35,7 @@ class DetailsActivity : AppCompatActivity() {
     private var player: MediaPlayer? = null
     private var isRecording = false
     private var isPlaying = false
+    private var idPlaying: Long = 0
 
     private val viewModel: MainViewModel by  viewModels {
         MainViewModelFactory((application as NoteApp).database!!.noteDao(),
@@ -120,6 +123,13 @@ class DetailsActivity : AppCompatActivity() {
                     button.layoutParams = LinearLayout.LayoutParams(200, 200)
                     button.setImageResource(R.drawable.ic_play)
                     button.setOnClickListener {
+                        if(media.id!=idPlaying){
+                            isPlaying=false
+                            for(viewV in binding.audiosLayout.children){
+                                (viewV as ImageView).setImageResource(R.drawable.ic_play)
+                            }
+                        }
+                        idPlaying = media.id
                         if(!isPlaying) button.setImageResource(R.drawable.ic_playing)
                         else button.setImageResource(R.drawable.ic_play)
                         onPlay(media.path, isPlaying)
