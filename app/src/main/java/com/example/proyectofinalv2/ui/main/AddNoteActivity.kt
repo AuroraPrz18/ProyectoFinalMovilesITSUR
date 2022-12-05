@@ -32,6 +32,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyectofinalv2.*
 import com.example.proyectofinalv2.adapters.MediaListAdapter
+import com.example.proyectofinalv2.adapters.RemindersListAdapter
 import com.example.proyectofinalv2.data.NoteApp
 import com.example.proyectofinalv2.databinding.ActivityAddNoteBinding
 import com.example.proyectofinalv2.domain.model.Multimedia
@@ -49,12 +50,15 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 private const val REQUEST_CODE =200
-class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener {
+class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardViewClickListener,
+    RemindersListAdapter.ViewHolder.CardViewClickListener {
     // Arrays LiveData
     private var notesList = ArrayList<Note>()
     private var remindersList = ArrayList<Reminder>()
+    private var remindersListRV = ArrayList<Reminder>() // En recyclerView
     private var mediasList = ArrayList<Multimedia>() // En recyclerView
     private var deleteMediaList = ArrayList<Multimedia>()
+    private var deleteRemindersList = ArrayList<Reminder>()
     // Arrays auxiliares
     private val media = mutableListOf<Multimedia>();
     private val reminders = mutableListOf<Reminder>();
@@ -84,6 +88,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     private var strDate = ""
     //Recyvlerview
     private lateinit var adapterM: MediaListAdapter
+    private lateinit var adapterR: RemindersListAdapter
     var dueDate: Date? = null
 
 
@@ -119,6 +124,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         }
 
         getMedia()
+        getReminders()
         addNoteViewModel.allNotes().observe(this){
                 list ->
             notesList = list as ArrayList<Note>
@@ -138,6 +144,24 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             }
             adapterM.setData(mediasList)
             adapterM.notifyDataSetChanged()
+        }
+        addNoteViewModel.allReminders().observe(this){
+                list ->
+            remindersListRV.clear()
+            // Add those in the DB
+            for(reminderV in list){
+                if(note!=null && reminderV.noteId == note!!.id){
+                    remindersListRV.add(reminderV);
+                }
+            }
+            // Add those news
+            for(reminderV in reminders){
+                remindersListRV.add(reminderV);
+            }
+            adapterR.setData(remindersListRV)
+            adapterR.notifyDataSetChanged()
+            remindersList = list as ArrayList<Reminder>
+            setUpAlarm()
         }
 
         note = intent.getSerializableExtra("note") as Note?
@@ -177,6 +201,25 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         recyclerView?.apply {
             layoutManager = layoutManagerRV
             adapter = adapterM
+        }
+    }
+
+    private fun getReminders() {
+        val recyclerView = binding.remindersRV
+        /*for(reminderV in remindersList){
+            media.add(reminderV)
+        }*/
+        adapterR = RemindersListAdapter(this@AddNoteActivity)
+        var layoutManagerRV: RecyclerView.LayoutManager
+        if(isTablet() == true){
+            layoutManagerRV = GridLayoutManager(this, 3)
+        }else{
+            layoutManagerRV =
+                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        }
+        recyclerView?.apply {
+            layoutManager = layoutManagerRV
+            adapter = adapterR
         }
     }
 
@@ -243,21 +286,15 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             var strI3 =  picker.minute.toString()
             if(strI3.length==1)strI3 = "0"+picker.minute.toString()
             strDate += "T"+strI2+":"+strI3+":00"//"2007-12-03T10:15:30"
-            addReminderText(strDate, isDueDate)
             calendars.add(calendar)
             if(isDueDate){
                 dueDate = localDateToDate(LocalDateTime.parse(strDate))
             }
             reminders.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate)), isSetUp = false, isDueDate = isDueDate))
+            remindersListRV.add(Reminder(noteId = -1, date = localDateToDate(LocalDateTime.parse(strDate)), isSetUp = false, isDueDate = isDueDate))
+            adapterR.setData(remindersListRV)
+            adapterR.notifyDataSetChanged()
         }
-    }
-
-    private fun addReminderText(strDate: String, isDueDate: Boolean) {
-        val textView = TextView(this)
-        if(isDueDate==true){
-            textView.setText("DUE DATE: $strDate")
-        }else textView.setText(strDate)
-        binding.remindersLayout.addView(textView)
     }
 
     fun localDateToDate(localDate: LocalDateTime): Date? {
@@ -325,11 +362,6 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         val isATask = binding.isTaskSwitch.isChecked
         if (!isATask) dueDate = null
 
-        addNoteViewModel.allReminders().observe(this){
-                list ->
-            remindersList = list as ArrayList<Reminder>
-            setUpAlarm()
-        }
 
         if(note==null){
             val newNote = Note(title = title, description = description, isTask = isATask,
@@ -343,6 +375,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             updatedNote.dueDate = dueDate
             addNoteViewModel.updateNote(updatedNote, media, reminders)
             deleteMedia()
+            deleteReminders()
         }
         finish()
     }
@@ -521,6 +554,12 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             addNoteViewModel.deleteMultimedia(mediaV)
         }
     }
+    fun deleteReminders(){
+        for(reminderV in deleteRemindersList){
+            addNoteViewModel.deleteReminder(reminderV)
+            // TODO: Eliminar alarma
+        }
+    }
 
     override fun onDeleteClickListener(mediaV: Multimedia) {
         if(mediaV.noteId==-1.toLong()){
@@ -549,6 +588,19 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                 Log.e("Audio error", "prepare() failed")
             }
         }
+    }
+
+    override fun onDeleteClickListener(reminder: Reminder) {
+        if(reminder.noteId==-1.toLong()){
+            reminders.remove(reminder)
+        }else deleteRemindersList.add(reminder)
+        remindersListRV.remove(reminder)
+        adapterR.setData(remindersListRV)
+        adapterR.notifyDataSetChanged()
+    }
+
+    override fun onEditClickListener(reminder: Reminder) {
+        TODO("Not yet implemented")
     }
 
 }

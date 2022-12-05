@@ -37,10 +37,11 @@ class RemindersListAdapter (val onClickListeners: RemindersListAdapter.ViewHolde
     }
 
     override fun onBindViewHolder(holder: RemindersListAdapter.ViewHolder, position: Int) {
-        TODO("Not yet implemented")
         val reminder: Reminder = remindersList[position]
         holder.apply {
-            infoTxt.text = reminder.date.toString()
+            infoTxt.text = ""
+            if(reminder.isDueDate==true)infoTxt.text = "DUE DATE:"
+            infoTxt.text = infoTxt.text.toString()+reminder.date.toString()
             deleteBtn.setOnClickListener {
                 onClickListeners.onDeleteClickListener(reminder)
             }
