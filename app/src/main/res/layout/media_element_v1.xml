@@ -39,18 +39,17 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_toStartOf="@+id/menu"
                 android:layout_weight="0"
                 android:gravity="start"
                 android:orientation="horizontal"
                 android:padding="16dp">
 
                 <ImageView
-                    android:id="@+id/imageButton"
+                    android:id="@+id/listenBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_audio" />
+                    app:srcCompat="@drawable/ic_play" />
 
                 <TextView
                     android:id="@+id/nameAudioTxt"

@@ -1,15 +1,19 @@
 package com.example.proyectofinalv2.adapters
 
-import android.app.AlertDialog
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.view.children
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.proyectofinalv2.R
 import com.example.proyectofinalv2.domain.model.Multimedia
+import java.io.IOException
 
 class MediaListAdapter (val onClickListeners: MediaListAdapter.ViewHolder.CardViewClickListener) : RecyclerView.Adapter<MediaListAdapter.ViewHolder>(){
     var mediasList = ArrayList<Multimedia>()
@@ -21,15 +25,18 @@ class MediaListAdapter (val onClickListeners: MediaListAdapter.ViewHolder.CardVi
         val audioLayout: LinearLayout
         val nameAudio: TextView
         val deleteBtn: ImageView
+        val listenBtn: ImageView
         init{
             mediaLayout = view.findViewById(R.id.mediaLayout)
             audioLayout = view.findViewById(R.id.audioLayout)
             nameAudio = view.findViewById(R.id.nameAudioTxt)
             deleteBtn = view.findViewById(R.id.deleteBtn)
+            listenBtn = view.findViewById(R.id.listenBtn)
         }
         interface CardViewClickListener{
             fun onDeleteClickListener(media: Multimedia)
             fun onEditClickListener(media: Multimedia)
+            fun onPlay(path: String, start: Boolean)
         }
 
     }
@@ -70,12 +77,31 @@ class MediaListAdapter (val onClickListeners: MediaListAdapter.ViewHolder.CardVi
             }else if(media.type == 3.toLong()){ // Audio
                 audioLayout.visibility = View.VISIBLE
                 nameAudio.setText(media.path)
+                listenBtn.tag = R.drawable.ic_play
+                listenBtn.setOnClickListener { null }
+                listenBtn.setOnClickListener {
+                    var integer = listenBtn.tag
+                    integer = integer ?: 0
+                    when(integer){
+                        R.drawable.ic_play -> {
+                            listenBtn.setImageResource(R.drawable.ic_playing)
+                            listenBtn.tag = R.drawable.ic_playing
+                            onClickListeners.onPlay(media.path, false)
+                        }
+                        R.drawable.ic_playing -> {
+                            listenBtn.setImageResource(R.drawable.ic_play)
+                            listenBtn.tag = R.drawable.ic_play
+                            onClickListeners.onPlay(media.path, true)
+                        }
+                    }
+                }
             }
             deleteBtn.setOnClickListener {
                 onClickListeners.onDeleteClickListener(media)
             }
         }
     }
+
 
     override fun getItemCount(): Int {
         return mediasList.size

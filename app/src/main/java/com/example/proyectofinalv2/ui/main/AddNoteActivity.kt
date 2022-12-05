@@ -161,6 +161,24 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     }
 
 
+    private fun getMedia() {
+        val recyclerView = binding.mediaRV
+        for(mediaV in mediasList){
+            media.add(mediaV)
+        }
+        adapterM = MediaListAdapter(this@AddNoteActivity)
+        var layoutManagerRV: RecyclerView.LayoutManager
+        if(isTablet() == true){
+            layoutManagerRV = GridLayoutManager(this, 3)
+        }else{
+            layoutManagerRV =
+                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
+        }
+        recyclerView?.apply {
+            layoutManager = layoutManagerRV
+            adapter = adapterM
+        }
+    }
 
     private fun addVideo() {
         Intent(MediaStore.ACTION_VIDEO_CAPTURE).also { takeVideoIntent ->
@@ -180,24 +198,6 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
                     startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE)
                 }
             }
-        }
-    }
-    private fun getMedia() {
-        val recyclerView = binding.mediaRV
-        for(mediaV in mediasList){
-            media.add(mediaV)
-        }
-        adapterM = MediaListAdapter(this@AddNoteActivity)
-        var layoutManagerRV: RecyclerView.LayoutManager
-        if(isTablet() == true){
-            layoutManagerRV = GridLayoutManager(this, 3)
-        }else{
-            layoutManagerRV =
-                LinearLayoutManager(this, RecyclerView.VERTICAL, false)
-        }
-        recyclerView?.apply {
-            layoutManager = layoutManagerRV
-            adapter = adapterM
         }
     }
 
@@ -307,26 +307,14 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageView = ImageView(this)
             imageView.layoutParams = LinearLayout.LayoutParams(400, 400)
-            Glide.with(this)
-                .load(photoURI)
-                .fitCenter()
-                .skipMemoryCache(true)
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .placeholder(R.drawable.placeholder)
-                .into(imageView);
-            binding.layoutPhotos.addView(imageView);
             media.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
+            mediasList.add(Multimedia(noteId = -1, type = REQUEST_IMAGE_CAPTURE.toLong(), path = photoURI.toString()));
         }else if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == RESULT_OK){
-            val videoView = VideoView(this)
-            videoView.layoutParams = LinearLayout.LayoutParams(400, 400)
-            videoView.setVideoURI(photoURI)
-            videoView.start()
-            val mediacontrolleralone = MediaController(this)
-            mediacontrolleralone.setAnchorView(videoView)
-            videoView.setMediaController(mediacontrolleralone)
-            binding.videosLayout.addView(videoView);
             media.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = photoURI.toString()));
+            mediasList.add(Multimedia(noteId = -1, type = REQUEST_VIDEO_CAPTURE.toLong(), path = photoURI.toString()));
         }
+        adapterM.setData(mediasList)
+        adapterM.notifyDataSetChanged()
     }
 
 
@@ -446,7 +434,7 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
         }
         isRecording = false
         binding.audioBtn.setMaxImageSize(100)
-        val button = ImageView(this)
+        /*val button = ImageView(this)
         button.layoutParams = LinearLayout.LayoutParams(200, 200)
         button.setImageResource(R.drawable.ic_play)
         button.setOnClickListener {
@@ -455,8 +443,11 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
             onPlay(isPlaying)
             isPlaying = !isPlaying
         }
-        binding.audiosLayout.addView(button);
+        binding.audiosLayout.addView(button);*/
         media.add(Multimedia(noteId = -1, type = REQUEST_AUDIO_CAPTURE.toLong(), path = audioFileName));
+        mediasList.add(Multimedia(noteId = -1, type = REQUEST_AUDIO_CAPTURE.toLong(), path = audioFileName));
+        adapterM.setData(mediasList)
+        adapterM.notifyDataSetChanged()
     }
 
     private fun onPlay(start: Boolean) = if (start) {
@@ -543,6 +534,23 @@ class AddNoteActivity : AppCompatActivity(), MediaListAdapter.ViewHolder.CardVie
     override fun onEditClickListener(mediaV: Multimedia) {
         TODO("Not yet implemented")
     }
+
+    override fun onPlay(path: String, start: Boolean) = if (start) {
+        player?.release()
+        player = null
+    } else {
+        player = MediaPlayer().apply {
+            try {
+                setAudioStreamType(AudioManager.STREAM_MUSIC)
+                setDataSource(path)
+                prepare()
+                start()
+            } catch (e: IOException) {
+                Log.e("Audio error", "prepare() failed")
+            }
+        }
+    }
+
 }
 
 
