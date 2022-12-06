@@ -23,4 +23,27 @@
     <string name="notes">Notas</string>
     <string name="tasks">Tareas</string>
     <string name="notications">Notificaciones</string>
+    <string name="reminder_date_mm_dd_yy">Fecha de recordatorio mm/dd/yy</string>
+    <string name="add_reminder">Agregar recordatorio</string>
+    <string name="add_photo">Agregar foto</string>
+    <string name="add_audio">Agregar audio</string>
+    <string name="title_activity_details">DetailsActivity</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="channel_name">NOTES_S19120121_CHANNEL</string>
+    <string name="channel_desc">Channel for alarm manager</string>
+    <string name="notificationDescForTask">Hay algo esperando tu atención. Da clic aquí para ver qué sucede.</string>
+    <string name="notificationTitleForTask">Una tarea te está esperando</string>
+    <string name="add_video">Agregar video</string>
+    <string name="edit_media">Editar multimedia</string>
+    <string name="delete_media">Borrar multimedia</string>
+    <string name="notificationTitleForDueDate">La fecha de termino ha llegado</string>
+    <string name="camera">Cámara</string>
+    <string name="files">Archivos</string>
+    <string name="speaker">Micrófono</string>
+    <string name="set_up_due_date">Elegir fecha de fin</string>
 </resources>

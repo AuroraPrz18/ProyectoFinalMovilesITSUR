@@ -39,24 +39,25 @@ class AlarmReceiver: BroadcastReceiver() {
     }
 
     private fun mostrarNotificacion(context: Context?, intent: Intent?) {
-        val note: Note = intent?.getSerializableExtra("note") as Note
-        val intentTap = Intent(context, DetailsActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("note", note)
+        if(intent?.hasExtra("note")==true){
+            val note: Note = intent?.getSerializableExtra("note") as Note
+            val intentTap = Intent(context, DetailsActivity::class.java).apply {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                putExtra("note", note)
+            }
+            val notifyPendingIntent = PendingIntent.getActivity(
+                context, 0, intentTap,
+                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            )
+            val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
+                .setContentTitle(intent?.getStringExtra(title))
+                .setContentText(intent?.getStringExtra(desc))
+                .setContentIntent(notifyPendingIntent)
+            val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            var id: Int = intent?.getIntExtra("notiId", 0)!!
+            notificationManager.notify(id, builder.build())
         }
-        val notifyPendingIntent = PendingIntent.getActivity(
-            context, 0, intentTap,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-        )
-
-        val builder = NotificationCompat.Builder(context!!, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_baseline_add_alarm_24)
-            .setContentTitle(intent?.getStringExtra(title))
-            .setContentText(intent?.getStringExtra(desc))
-            .setContentIntent(notifyPendingIntent)
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        var id: Int = intent?.getIntExtra("notiId", 0)!!
-        notificationManager.notify(id, builder.build())
     }
 
     companion object {

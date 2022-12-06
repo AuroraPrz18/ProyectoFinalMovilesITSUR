@@ -147,7 +147,6 @@ class MainFragment : Fragment(), NotesListAdapter.ViewHolder.CardViewClickListen
     }
 
     override fun onPostponeClickListener(note: Note) {
-        Toast.makeText(activity, "sss", Toast.LENGTH_LONG).show()
         val getDate = Calendar.getInstance()
         var calendar: Calendar = Calendar.getInstance()
         val datepicker = DatePickerDialog(this.context!!, android.R.style.Theme_Holo_Light_Dialog_MinWidth,

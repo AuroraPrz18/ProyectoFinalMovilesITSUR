@@ -95,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Set up due date"
+                android:text="@string/set_up_due_date"
                 android:textColor="@color/black"
                 android:backgroundTint="@color/second_color"
                 app:layout_constraintBottom_toBottomOf="parent"

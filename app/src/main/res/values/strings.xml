@@ -45,4 +45,5 @@
     <string name="camera">Camera</string>
     <string name="files">Files</string>
     <string name="speaker">Speaker</string>
+    <string name="set_up_due_date">Set up due date</string>
 </resources>
